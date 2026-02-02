@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sc="https://www.thymeleaf.org/tyhmeleaf-extras-springsecurity6">
+<head th:replace="fragments :: page_head('Users - Shopme Admin')"></head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="navigation :: menu"></div>
+
+		<div>
+			<h2>Manage Category</h2>
+			<a th:href="@{/category/new}"
+				class="fa-solid fa-folder-plus fa-2x icon-dark mr-2"></a>
+			&nbsp;|&nbsp; <a th:href="@{/category/export/csv}"
+				class="fa-solid fa-file-csv fa-2x icon-dark mr-2"></a>
+		</div>
+	</div>
+
+	<div th:if="${message !=null}" class="alert alert-success text-center">
+		[[${message}]]</div>
+
+	<div>
+		<form th:action="@{/category/page/1}" class="d-flex m-3">
+			<input type="hidden" name="sortField" th:value="${sortField}">
+			<input type="hidden" name="sortDir" th:value="${sortDir}">
+			Filter:&nbsp; <input type="seacrh" name="keyword"
+				class="form-control w-auto" th:value="${keyword}" required />
+			&nbsp;&nbsp;
+			<Button type="submit" class="btn btn-primary">
+				<i class="fa-solid fa-magnifying-glass icon-white"></i>
+			</Button>
+			&nbsp;&nbsp;
+			<button type="button" class="btn btn-secondary"
+				onclick="clearFilter()">
+				<i class="fa-solid fa-eraser"></i>
+			</button>
+		</form>
+	</div>
+
+	<div class="full-details">
+		<table
+			class="table table-bordered table-striped table-hover table-responsive-xl">
+			<thead class="table-dark">
+				<tr>
+					<th th:replace="fragments :: column_link('id','ID','hideable-column')" />
+					<th>Category Image</th>
+					<th	th:replace="fragments :: column_link('name','Category Name','hideable-column')" />
+					<th th:replace="fragments :: column_link('alias','Alias','')" />
+					<th th:replace="fragments :: column_link('enabled','Enabled','')" />
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="category : ${listCategories}">
+					<td>[[${category.id}]]</td>
+					<td></td>
+					<td>[[${category.name}]]</td>
+					<td>[[${category.alias}]]</td>
+			
+					<td><a class="fas fa-check-circle fa-2x icon-green"></a> 
+					<a class="fas fa-times-circle fa-2x icon-dark"></a></td>
+
+					<td><a th:href="@{/categories/new}" 
+					 class="fas fa-edit fa-2x icon-green"></a>
+					&nbsp; <a class="fas fa-trash fa-2x icon-dark link-delete"></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div th:replace="fragments :: footer"></div>
+
+	
+</body>
+</html>

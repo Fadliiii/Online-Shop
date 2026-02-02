@@ -1,0 +1,35 @@
+.icon-white {
+    color: white !important;
+}
+
+.icon-silver {
+    color: silver !important;
+}
+
+.icon-green {
+    color: green !important;
+}
+
+.icon-dark {
+    color: #333 !important;
+}
+
+
+
+
+@media (max-width: 768px) {
+	
+    div.full-details { display: none }
+    div.less-details { display: block; }
+}
+@media screen and (min-width: 769px) and (max-width: 1023px){
+	/* Medium screen */
+		div.full-details{ display:block }
+		 div.less-details { display: none; }
+		 .hideable-column{ display: none }
+}
+@media screen and (min-width : 1024px){
+	/* Large screen*/
+	 div.less-details { display: none; }
+	 .hideable-column{ display: table-cell}
+}
