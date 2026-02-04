@@ -19,19 +19,23 @@ public class CategoryService {
 		return categoryRepository.findAll();
 	}
 
+	public Category save (Category category) {
+		return categoryRepository.save(category);
+	}
+	
 	public List<Category> listCategoriesUsedInForm() {
 		List<Category> categoriesUsedInForm = new ArrayList<>();
 		Iterable<Category> categoriesInDB = categoryRepository.findAll();
 
 		for (Category category : categoriesInDB) {
 			if (category.getParent() == null) {
-				categoriesUsedInForm.add(new Category(category.getName()));
+				categoriesUsedInForm.add(Category.copyIdAndName(category));
 				
 				Set<Category> childern = category.getChildren();
 
 				for (Category subCategory : childern) {
 					String name = "--" + subCategory.getName();
-					categoriesUsedInForm.add(new Category(name));
+					categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(),name));
 					listChildern(categoriesUsedInForm,subCategory,1);
 				}
 			}
@@ -41,7 +45,9 @@ public class CategoryService {
 
 	}
 	
-	private void listChildern(List<Category> categoriesUsedInForm,Category parent,int subLevel) {	
+	private void listChildern(List<Category> categoriesUsedInForm,
+			Category parent,
+			int subLevel) {	
 		int newSubLevel = subLevel + 1;
 		Set<Category> childern = parent.getChildren();
 		
@@ -51,10 +57,12 @@ public class CategoryService {
 				name += "";
 			}
 			name += subCategory.getName();
-			categoriesUsedInForm.add(new Category(name));
+			categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(),name));
 		
 		listChildern(categoriesUsedInForm,subCategory, newSubLevel);
 	}
+	
 }
+	
 
 }
