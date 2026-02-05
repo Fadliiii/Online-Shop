@@ -65,6 +65,7 @@ public class CategoryRepositoryTest {
 			
 	}
 }
+	
 		private void printChildern(Category parent,int subLevel) {	
 			int newSubLevel = subLevel + 1;
 			Set<Category> childern = parent.getChildren();
@@ -80,4 +81,10 @@ public class CategoryRepositoryTest {
 		}
 	}
 
+		@Test 
+		public void testListRootCategories() {
+			List<Category>rootCategories = categoryRepository.findRootCategories();
+			
+			rootCategories.forEach(cat -> System.out.println(cat.getName()));
+		}
 }
