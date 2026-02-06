@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,18 +47,33 @@ public class CategoryController {
 			RedirectAttributes attributes,
 			@RequestParam("fileImage")MultipartFile multipartFile) throws IOException {
 		
-		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-		category.setImage(fileName);
+		try {
+			categoryService.save(category, multipartFile);
+			attributes.addFlashAttribute("message",
+					"The category has been saved sucessfully");
+		} catch (Exception e) {
+			attributes.addFlashAttribute("message","Error while saving category");
+		}
+		return"redirect:/category";
+	}
+	
+	@GetMapping("/edit/{id}")
+	public String updateCategory(@PathVariable int id,
+			Model model,
+			RedirectAttributes redirectAttributes) {
 		
+		try {
+			Category category = categoryService.findById(id);
+			List<Category>listCategories= categoryService.listCategoriesUsedInForm();
+			model.addAttribute("listCategories",listCategories);
+			model.addAttribute("category", category);
+			
+			return"category/category_form";
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+			return "redirect:/category";
+		}
 		
-		Category savedCategory = categoryService.save(category);
-		String uploadDir = "../category-images/"+savedCategory.getId();
-		FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-		
-		attributes.addFlashAttribute("message","The category has been saved successfully");
-		
-		
-		return "redirect:/category";
 	}
 	
 }

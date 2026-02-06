@@ -1,5 +1,6 @@
 package com.shopme.admin.category;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -7,7 +8,11 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.user.UserNotFoundException;
 import com.shopme.common.entity.Category;
 
 @Service
@@ -62,7 +67,25 @@ public class CategoryService {
 		}
 	}
 	
-	public Category save (Category category) {
+	public Category save (Category category,MultipartFile multipartFile) throws IOException {
+		
+		if (multipartFile != null && !multipartFile.isEmpty()) {
+			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+			category.setImage(fileName);
+			
+			
+			Category savedCategory = categoryRepository.save(category);
+			
+			String uploadDir = "../category-images/"+savedCategory.getId();
+			FileUploadUtil.cleanDir(uploadDir);
+			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+		
+			return savedCategory;
+		}
+			if (category.getImage()==null || category.getImage().isEmpty()) {
+				category.setImage(null);
+			}
+		
 		return categoryRepository.save(category);
 	}
 	
@@ -106,6 +129,12 @@ public class CategoryService {
 	}
 	
 }
-	
+	public Category  findById(int id) throws UserNotFoundException {
+		try {
+			return categoryRepository.findById(id).get();
+		} catch (Exception e) {
+			throw new  UserNotFoundException("Could not find id category with ID " + id);
+		}
+	}
 
 }
