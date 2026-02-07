@@ -12,14 +12,21 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.security.WebSecurityConfig;
 import com.shopme.admin.user.UserNotFoundException;
 import com.shopme.common.entity.Category;
 
 @Service
 public class CategoryService {
 
+    private final WebSecurityConfig webSecurityConfig;
+
 	@Autowired
 	CategoryRepository categoryRepository;
+
+    CategoryService(WebSecurityConfig webSecurityConfig) {
+        this.webSecurityConfig = webSecurityConfig;
+    }
 
 	public List<Category> listAll() {
 		List<Category>findRootCategories = categoryRepository.findRootCategories();
@@ -135,6 +142,36 @@ public class CategoryService {
 		} catch (Exception e) {
 			throw new  UserNotFoundException("Could not find id category with ID " + id);
 		}
+	}
+	
+	public String checkUnique (Integer id, String name, String alias) {
+		boolean isCreatingNew = (id == null || id == 0);
+		
+		Category categoryByName = categoryRepository.findByName(name);
+		
+		if(isCreatingNew) {
+			if(categoryByName != null) {
+				return "Duplicate Name";
+			}else {
+			Category categoryByAlias = categoryRepository.findByAlias(alias);
+				if(categoryByAlias != null) {
+					return "Duplicate Alias";
+				}
+			}	
+		}
+		else {
+			if(categoryByName !=null && categoryByName.getId() != null) {
+				return "Duplicate Name";
+			}
+		
+			Category categoryByAlias = categoryRepository.findByAlias(alias);
+			if (categoryByAlias != null && categoryByAlias.getId() != id) {
+				return "Duplicate Alias";
+			}
+		}
+		
+		
+		return"OK";
 	}
 
 }

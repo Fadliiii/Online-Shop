@@ -115,6 +115,14 @@ public class Category {
 
 	
 
+	
+
+	public Category(Integer id, String name, String alias) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.alias = alias;
+	}
 
 
 	public Category(Integer id) {
@@ -190,6 +198,7 @@ public class Category {
 	
 	@Transient
 	public String getImagePath() {
+		if(this.id == null) return "/images/image-thumbnail.png";
 		return "/category-images/"+this.id+"/"+this.image;
 	}
 }

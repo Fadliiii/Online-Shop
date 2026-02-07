@@ -66,6 +66,23 @@ public class CategoryRepositoryTest {
 	}
 }
 	
+	@Test
+	public void testFindByName() {
+		String name = "Computer";
+		Category category= categoryRepository.findByName(name);
+		assertThat(category).isNotNull();
+		assertThat(category.getName()).isEqualTo(name);
+		
+	}
+	
+	@Test
+	public void testFindByAlias() {
+		String alias = "Computer";
+		Category category = categoryRepository.findByAlias(alias);
+		assertThat(category).isNotNull();
+		assertThat(category.getAlias()).isEqualTo(alias);
+	}
+	
 		private void printChildern(Category parent,int subLevel) {	
 			int newSubLevel = subLevel + 1;
 			Set<Category> childern = parent.getChildren();
