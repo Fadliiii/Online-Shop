@@ -140,23 +140,7 @@
 			</div>
 		</form>
 
-		<div class="modal fade" id="modalDialog" tabindex="-1">
-			<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content text-center">
-				<div class="modal-header">
-					<h4 class="modal-title" id="modalTitle">Warning</h4>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-				</div>
-				<div class="modal-body">
-					<span id="modalBody"></span>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-				</div>
-				</div>
-			</div>
-		</div>
-
+			<div th:replace="modal_fragment :: modal_dialog"></div>
 			<div th:replace="fragments :: footer"></div>
 	</div>
 
@@ -175,25 +159,15 @@
 				if(response == "OK"){
 					form.submit();
 				}else if(response == "Duplicated"){
-					showModalDialog("Warning","There is another user having the email "+ userEmail);	
+					showWarningrModal("There is another user having the email "+ userEmail);	
 				}else{
-					showModalDialog("Error","Unknown response from server");
+					showErrorModal("Unknown response from server");
 				}
 			}).fail(function(){
-				showModalDialog("Error","Could not connect to the server");
+				showErrorModal("Could not connect to the server");
 			});
 			return false;
 		}
-	
-	function showModalDialog(title,message){
-		document.getElementById("modalTitle").textContent = title;
-		document.getElementById("modalBody").textContent = message;
-
-		const modalEl = document.getElementById("modalDialog");
-		const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-		modal.show();
-
-	}
 </script>
 <script th:src="@{/js/common_form.js}"></script>
 </body>

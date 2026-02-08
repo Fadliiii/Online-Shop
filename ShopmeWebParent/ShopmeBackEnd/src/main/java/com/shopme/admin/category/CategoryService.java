@@ -160,7 +160,7 @@ public class CategoryService {
 			}	
 		}
 		else {
-			if(categoryByName !=null && categoryByName.getId() != null) {
+			if(categoryByName !=null && categoryByName.getId() != id) {
 				return "Duplicate Name";
 			}
 		
