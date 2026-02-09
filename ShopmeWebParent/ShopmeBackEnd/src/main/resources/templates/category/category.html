@@ -41,11 +41,14 @@
 			class="table table-bordered table-striped table-hover table-responsive-xl">
 			<thead class="table-dark">
 				<tr>
-					<th th:replace="fragments :: column_link('id','ID','hideable-column')" />
+					<th>ID</th>
 					<th>Category Image</th>
-					<th	th:replace="fragments :: column_link('name','Category Name','hideable-column')" />
-					<th th:replace="fragments :: column_link('alias','Alias','')" />
-					<th th:replace="fragments :: column_link('enabled','Enabled','')" />
+					<th>
+						<a class="text-white" th:href="@{'/category?sortDir='+${reverseSortDir}}">Category Name</a>
+						 <span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }"></span>
+					</th>
+					<th>Alias</th>
+					<th>Enabled</th>
 					<th></th>
 				</tr>
 			</thead>
