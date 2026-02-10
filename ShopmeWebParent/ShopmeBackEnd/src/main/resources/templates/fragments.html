@@ -23,7 +23,8 @@
 	<th th:fragment="column_link(fieldName,columnLabel,cssClass)" th:classappend="${cssClass}"><a
 		class="text-white text-decoration-none"
 		th:href=" @{'/users/page/'+ ${currentPage} +'?sortField=' +${fieldName}+'&sortDir=' + ${sortField != fieldName ? sortDir:reverseSortDir}+ ${keyword !=null?'&keyword='+keyword:''}}">
-			[[${columnLabel}]] </a> <span th:if="${sortField == fieldName}"
+			[[${columnLabel}]] </a>
+			 <span th:if="${sortField == fieldName}"
 		th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }"></span>
 	</th>
 
@@ -34,6 +35,32 @@
 
 <div th:fragment="footer" class="text-center m-3">
 			<p>Shopme Control Panel - Copyright &copy; Shopme</p>
+		</div>
+		
+		<div th:fragment="category_status">
+			<a th:if="${category.enabled == true }"
+						class="fas fa-check-circle icon-green fa-2x"
+						th:href="@{'/category/'+${category.id}+'/enabled/false'}"
+						title="Disabled This category"></a> 
+						
+						<a th:if="${category.enabled == false }"
+						class="fas fa-times-circle icon-dark fa-2x"
+						th:href="@{'/users/'+${category.id}+'/enabled/true'}"
+						title="Enabled This category"></a>
+		</div>
+		
+		<div th:fragment="category_actions" th:remove="tag">
+			<a class="fas fa-edit fa-2x icon-green" th:href="@{'/category/edit'+${category.id}}"
+			title="Edit this category"></a>
+			&nbsp;
+			
+			<th:block th:if="${category.hasChildren == false}">
+			<a class="fas fa-trash fa-2x icon-dark link-delete"
+			th:href="@{'/category/delete/'+${category.id}}"
+			th:entityID="${category.id}"
+			title="Delete this category"></a>
+			</th:block>
+					
 		</div>
 </body>
 </html>

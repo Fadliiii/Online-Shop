@@ -14,12 +14,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.webjars.NotFoundException;
 
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.security.WebSecurityConfig;
 import com.shopme.admin.user.UserNotFoundException;
 import com.shopme.common.entity.Category;
 
+import jakarta.transaction.Transactional;
+@Transactional
 @Service
 public class CategoryService {
 
@@ -209,4 +212,15 @@ public class CategoryService {
 		return sortedChildern;
 	}
 
+	public void updateUserEnabledStatus(Integer id, Boolean enabled) {
+		categoryRepository.updateEnabledStatus(id, enabled);
+	}
+	
+	public void delete(Integer id) {
+		Long countById = categoryRepository.countById(id);
+		if(countById == null || countById == 0) {
+			throw new NotFoundException("Could Not find any category = "+ id);
+		}
+		categoryRepository.deleteById(id);
+	}
 }

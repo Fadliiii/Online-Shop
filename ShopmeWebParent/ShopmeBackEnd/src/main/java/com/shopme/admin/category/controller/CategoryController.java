@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.webjars.NotFoundException;
 
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.category.CategoryService;
@@ -84,6 +85,36 @@ public class CategoryController {
 			return "redirect:/category";
 		}
 		
+	}
+	
+	@GetMapping("/{id}/enabled/{status}")
+	public String updateEnabledUserStatus(
+			@PathVariable(name ="id") Integer id,
+			@PathVariable(name="status") Boolean enabled,
+			RedirectAttributes redirectAttributes){
+		categoryService.updateUserEnabledStatus(id, enabled);
+		String status = enabled?"enabled" : "disabled";
+		String message ="The Category ID "+id+" has been "+ status;
+	
+		redirectAttributes.addFlashAttribute("message", message);
+		return "redirect:/category";
+	}
+	
+	@GetMapping("/delete/{id}")
+	public String deleteCategory(@PathVariable(name ="id") Integer id,
+			Model model,
+			RedirectAttributes redirectAttributes) {
+		try {
+			categoryService.delete(id);
+			String categoryDir = "../category-images/"+id;
+			FileUploadUtil.removeDir(categoryDir);
+			
+			redirectAttributes.addFlashAttribute("message","The category ID "+ id+ "has been deleted sucessfully");
+		}catch(NotFoundException e){
+			redirectAttributes.addFlashAttribute("message",e.getMessage());
+		}
+		
+		return "redirect:/category";
 	}
 	
 }
