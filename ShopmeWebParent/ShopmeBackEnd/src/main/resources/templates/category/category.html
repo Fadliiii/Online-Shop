@@ -44,7 +44,7 @@
 					<th>ID</th>
 					<th>Category Image</th>
 					<th>
-						<a class="text-white" th:href="@{'/category?sortDir='+${reverseSortDir}}">Category Name</a>
+						<a class="text-white" th:href="@{'/category/page/'+ ${pageNum}+'?sortDir='+${reverseSortDir}}">Category Name</a>
 						 <span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }"></span>
 					</th>
 					<th>Alias</th>
@@ -67,6 +67,9 @@
 				</tr>
 			</tbody>
 		</table>
+
+		<div th:replace="fragments :: pagination('/category','category')"></div>
+	
 
 	<div th:replace="modal_fragment :: confirm_modal"></div>
 

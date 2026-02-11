@@ -129,69 +129,11 @@
 		</div>
 		</div>
 
-		<div class="text-center m-1" th:if="${totalItems > 0}">
-			<span>Showing users # [[${startCount}]] to [[${endCount}]] of
-				[[${totalItems}]]</span>
-		</div>
-		<div class="text-center m-1" th:unless="${totalItems > 0}">
-			<span>No Users Found</span>
-		</div>
-
-
-		<div th:if="${totalPages > 1}">
-			<nav>
-				<ul class="pagination justify-content-center flex-wrap">
-					<li
-						th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="fragments :: page_link(1,'First')"></a>
-					</li>
-
-					<li
-						th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-						<a
-						th:replace="fragments :: page_link(${currentPage - 1}, 'Previous')"></a>
-					</li>
-
-
-					<li
-						th:class="${currentPage !=i ? 'page-item' : 'page-item active'}"
-						th:each="i :${#numbers.sequence(1,totalPages)}"><a
-						th:replace="fragments :: page_link(${i},${i})"></a></li>
-
-					<li
-						th:class="${currentPage < totalPages ? 'page-item' :'page-item disabled'}">
-						<a th:replace="fragments :: page_link(${currentPage +1},'Next')"></a>
-					</li>
-					<li
-						th:class="${currentPage < totalPages ? 'page-item' :'page-item disabled'}">
-						<a th:replace="fragments :: page_link(${totalPages},'Last')"></a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-
-		<div class="modal fade" id="confirmModal">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content text-center">
-					<div class="modal-header">
-						<h4 class="modal-title">Delete Confirmation</h4>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-					</div>
-					<div class="modal-body">
-						<span id="confirmText">Are you sure you want to delete user
-							ID</span>
-					</div>
-					<div class="modal-footer">
-						<a class="btn btn-success" href="" id="yesButton">Yes</a>
-						<button type="button" class="btn btn-danger"
-							data-bs-dismiss="modal">No</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-
+		
+		
+		<div th:replace="fragments :: pagination('/users','user')"></div>
+	
+		<div th:replace="modal_fragment :: confirm_modal"></div>
 		<div th:replace="fragments :: footer"></div>
 
 
