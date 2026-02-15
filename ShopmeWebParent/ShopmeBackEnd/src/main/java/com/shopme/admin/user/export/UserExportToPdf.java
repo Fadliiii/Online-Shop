@@ -16,6 +16,7 @@ import org.openpdf.text.pdf.PdfPTable;
 import org.openpdf.text.pdf.PdfTable;
 import org.openpdf.text.pdf.PdfWriter;
 
+import com.shopme.admin.AbstarctExporter;
 import com.shopme.common.entity.User;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UserExportToPdf extends AbstarctExporter{
 	
 	public void exporter(List<User>users,HttpServletResponse response) throws IOException {
-		super.setResponseHeader(response, "application/pdf",",pdf");
+		super.setResponseHeader(response, "application/pdf",",pdf","users_");
 		
 		Document document = new Document(PageSize.A4);
 		PdfWriter.getInstance(document, response.getOutputStream());

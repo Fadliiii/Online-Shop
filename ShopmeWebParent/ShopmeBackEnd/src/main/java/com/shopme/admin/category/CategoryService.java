@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,26 +22,36 @@ import org.webjars.NotFoundException;
 
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.security.WebSecurityConfig;
+import com.shopme.admin.user.RoleRepository;
 import com.shopme.admin.user.UserNotFoundException;
+import com.shopme.admin.user.UserRepository;
 import com.shopme.common.entity.Category;
 
 import jakarta.transaction.Transactional;
+
 @Transactional
 @Service
 public class CategoryService {
+
+    private final RoleRepository roleRepository;
+
+    private final UserRepository userRepository;
 	
-	private static final int ROOT_CATEGORIES_PER_PAGE = 4;
+	public static final int ROOT_CATEGORIES_PER_PAGE = 4;
 
     private final WebSecurityConfig webSecurityConfig;
 
 	@Autowired
 	CategoryRepository categoryRepository;
 
-    CategoryService(WebSecurityConfig webSecurityConfig) {
+    CategoryService(WebSecurityConfig webSecurityConfig, UserRepository userRepository, RoleRepository roleRepository) {
         this.webSecurityConfig = webSecurityConfig;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
-	public List<Category> listByPage(CategoryPageInfo pageInfo,int pageNum,String sortDir) {
+    
+	public List<Category> listByPage(CategoryPageInfo pageInfo,int pageNum,String sortDir,String keyword) {
 		
 		Sort sort = Sort.by("name");
 		
@@ -52,16 +63,30 @@ public class CategoryService {
 		
 		Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
 		 
-		Page<Category>pageCategories = categoryRepository.findRootCategories(pageable);
-		
+		Page<Category> pageCategories = null;
+	
+		if(keyword != null && !keyword.isEmpty()) {
+		pageCategories=	categoryRepository.search(keyword, pageable);
+		}else {
+	
+			pageCategories = categoryRepository.findRootCategories(pageable);
+		}
 		List<Category>rootCategories = pageCategories.getContent();
 	
 		pageInfo.setTotalElements(pageCategories.getTotalElements());
 		pageInfo.setTotalPages(pageCategories.getTotalPages());
 		
-		return listHierarchicalCategories(rootCategories, sortDir);
+		if(keyword != null && !keyword.isEmpty()) {
+			List<Category>searchResult = pageCategories.getContent();
+			for(Category category : searchResult) {
+				category.setHasChildren(category.getChildren().size()>0);	
+			}
+			return searchResult;
+		}else {
+			return listHierarchicalCategories(rootCategories, sortDir);
+		
+		}
 	}
-	
 	private List<Category>listHierarchicalCategories(List<Category>rootCategories,String sortDir){
 		List<Category>herarchicalCategories = new ArrayList<>();
 		
@@ -128,6 +153,7 @@ public class CategoryService {
 	
 	public List<Category> listCategoriesUsedInForm() {
 		List<Category> categoriesUsedInForm = new ArrayList<>();
+		
 		Iterable<Category> categoriesInDB = categoryRepository.findRootCategories(Sort.by("name").ascending());
 
 		for (Category category : categoriesInDB) {

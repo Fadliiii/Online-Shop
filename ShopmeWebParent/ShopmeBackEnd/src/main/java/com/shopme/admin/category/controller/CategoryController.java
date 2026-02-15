@@ -20,7 +20,12 @@ import org.webjars.NotFoundException;
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.category.CategoryPageInfo;
 import com.shopme.admin.category.CategoryService;
+import com.shopme.admin.category.exporter.CategoryExportToCsv;
+import com.shopme.admin.user.export.UserCsvExporter;
 import com.shopme.common.entity.Category;
+import com.shopme.common.entity.User;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/category")
@@ -33,12 +38,13 @@ public class CategoryController {
 	public String listFirstPage(Model model,
 			@Param("sortDir")String sortDir) {
 	
-		return listByPage(1, sortDir, model);
+		return listByPage(1, sortDir,null, model);
 	}
 	
 	@GetMapping("/page/{pageNum}")
 	public String listByPage(@PathVariable(name = "pageNum") int pageNum,
 			@Param("sortDir")String sortDir,
+			@Param("keyword")String keyword,
 			Model model) {
 	
 		if(sortDir == null || sortDir.isEmpty()) {
@@ -47,15 +53,24 @@ public class CategoryController {
 		
 		CategoryPageInfo pageInfo = new CategoryPageInfo();
 		
-		List<Category>listCategories = categoryService.listByPage(pageInfo,pageNum,sortDir);
+		List<Category>listCategories = categoryService.listByPage(pageInfo,pageNum,sortDir,keyword);
 	
+		long startCount =(pageNum - 1) * categoryService.ROOT_CATEGORIES_PER_PAGE + 1 ;
+		long endCount = startCount + categoryService.ROOT_CATEGORIES_PER_PAGE - 1;
+		if(endCount > pageInfo.getTotalElements()) {
+			endCount = pageInfo.getTotalElements();
+		}
+		
 		String reverseSortDir = sortDir.equals("asc")?"desc":"asc";
 		
 		model.addAttribute("totalPages",pageInfo.getTotalPages());
-		model.addAttribute("totalElement",pageInfo.getTotalElements());
+		model.addAttribute("totalItems",pageInfo.getTotalElements());
 		model.addAttribute("currentPage", pageNum);
 		model.addAttribute("sortField","name");
+		model.addAttribute("startCount",startCount);
+		model.addAttribute("endCount",endCount);
 		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("keyword", keyword);
 		model.addAttribute("listCategories",listCategories);
 		model.addAttribute("reverseSortDir", reverseSortDir);
 		return"category/category";
@@ -136,4 +151,14 @@ public class CategoryController {
 		return "redirect:/category";
 	}
 	
+	
+	@GetMapping("/export/csv")
+	public void exportToCsv(HttpServletResponse response) throws IOException {
+		
+		List<Category>listCategories = categoryService.listCategoriesUsedInForm();
+		CategoryExportToCsv exporter = new CategoryExportToCsv();
+		exporter.export(listCategories, response);
+	
+	
+	}
 }
