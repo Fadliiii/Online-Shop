@@ -20,10 +20,8 @@
 		</div>
 	</div>c
 
-	<div th:if="${message !=null}" class="alert alert-success text-center">
-		[[${message}]]</div>
 
-	<div th:replace = "fragments :: search_form('/users/page/1')"></div>
+	<div th:replace = "fragments :: search_form_and_message('/users/page/1')"></div>
 	<div class="full-details">
 		<table
 			class="table table-bordered table-striped table-hover table-responsive-xl">
@@ -31,21 +29,17 @@
 				<tr>
 
 
-					<th
-						th:replace="fragments :: column_link('id','User ID','hideable-column')" />
-
+					<th th:replace="fragments :: column_link('/users','id','User ID','hideable-column')" />
 
 					<th>Photos</th>
-
 					<th
-						th:replace="fragments :: column_link('email','Email','hideable-column')" />
-
+						th:replace="fragments :: column_link('/users','email','Email','hideable-column')" />
 					<th
-						th:replace="fragments :: column_link('firstName','First Name','')" />
+						th:replace="fragments :: column_link('/users','firstName','First Name','')" />
 					<th
-						th:replace="fragments :: column_link('lastName','Last Name','')">
+						th:replace="fragments :: column_link('/users','lastName','Last Name','')">
 					<th>Roles</th>
-					<th th:replace="fragments :: column_link('enabled','Enabled','')" />
+					<th th:replace="fragments :: column_link('/users','enabled','Enabled','')" />
 					<th></th>
 				</tr>
 			</thead>
@@ -61,21 +55,15 @@
 					<td>[[${user.firstName}]]</td>
 					<td>[[${user.lastName}]]</td>
 					<td>[[${user.roles}]]</td>
-
-					<td><a th:if="${user.enabled == true }"
-						class="fas fa-check-circle fa-2x icon-green"
-						th:href="@{'/users/'+${user.id}+'/enabled/false'}"
-						title="Disabled This User"></a> <a
-						th:if="${user.enabled == false }"
-						class="fas fa-times-circle fa-2x icon-dark"
-						th:href="@{'/users/'+${user.id}+'/enabled/true'}"
-						title="Enabled This User"></a></td>
-
-					<td><a class="fas fa-edit fa-2x icon-green"
-						th:href="@{'/users/edit/'+${user.id}}" title="Edit this user"></a>
-						&nbsp; <a class="fas fa-trash fa-2x icon-dark link-delete"
-						th:href="@{'/users/delete/'+ ${user.id}}"
-						th:attr="data-user-id =${user.id}" title="Delete This User"></a></td>
+					
+					<td>
+						<div th:replace="fragments :: status(${user.enabled},'user','/users/'+${user.id})"></div>
+					</td>
+					<td>
+					<div th:replace="fragments :: edit('user','/users/edit/'+${user.id})"></div>
+						&nbsp;&nbsp;
+					<div th:replace="fragments :: delete('user',${user.id},'/users/delete/'+${user.id},true)"></div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -93,19 +81,11 @@
 				<div>[[${user.fullName}]]</div>
 				<div>[[${user.roles}]]</div>
 				<div class="mt-1">
-					<a th:if="${user.enabled == true }"
-						class="fas fa-check-circle icon-green"
-						th:href="@{'/users/'+${user.id}+'/enabled/false'}"
-						title="Disabled This User"></a> <a
-						th:if="${user.enabled == false }"
-						class="fas fa-times-circle icon-dark"
-						th:href="@{'/users/'+${user.id}+'/enabled/true'}"
-						title="Enabled This User"></a> &nbsp; <a
-						class="fas fa-edit icon-green"
-						th:href="@{'/users/edit/'+${user.id}}" title="Edit this user"></a>
-					&nbsp; <a class="fas fa-trash  icon-dark link-delete"
-						th:href="@{'/users/delete/'+ ${user.id}}"
-						th:attr="data-user-id =${user.id}" title="Delete This User"></a>
+				<div th:replace="fragments :: status(${user.enabled},'user','/users/'+${user.id})"></div>
+					&nbsp; 
+				<div th:replace="fragments :: edit('user','/users/edit/'+${user.id})"></div>
+				&nbsp;
+				<div th:replace="fragments :: delete('user',${user.id},'/users/delete/'+${user.id},true)"></div>
 				</div>
 			</div>
 			<div>&nbsp;</div>
@@ -115,25 +95,22 @@
 		
 		
 		<div th:replace="fragments :: pagination('/users','user')"></div>
-	
 		<div th:replace="modal_fragment :: confirm_modal"></div>
 		<div th:replace="fragments :: footer"></div>
 
 
 	<script type="text/javascript">
-		//versi bootsrapt 4
 		 $(document).ready(function(){
 				$(".link-delete").on("click",function(e){
 					e.preventDefault();
 					 const link = $(this);
-					 const userId = link.attr("data-user-id");
-					
+					 const userId = link.attr("entityId");
+				
 					$("#yesButton").attr("href",link.attr("href"));
 					$("#confirmText").html(
-						"Are you sure you want to delet this user ID  "+userId+" ?"
+						"Are you sure you want to delete this user ID  "+userId+" ?"
 					);
 					
-				
 				const modal = new bootstrap.Modal(
 					document.getElementById("confirmModal")		
 				);
