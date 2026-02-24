@@ -64,13 +64,23 @@ public class Category {
 //		return Objects.equals(children, other.children);
 //	}
 
-
+	
 
 	public Category() {
 	
 	}
 	
 	
+
+
+	@Override
+	public String toString() {
+		return "Category [name=" + name + "]";
+	}
+
+
+
+
 	public static Category copyIdAndName(Category category) {
 		Category copyCategory = new Category();
 		

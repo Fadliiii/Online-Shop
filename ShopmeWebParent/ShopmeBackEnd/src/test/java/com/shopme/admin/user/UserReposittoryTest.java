@@ -88,9 +88,7 @@ public class UserReposittoryTest {
 		userFadli.addRole(roleSalesPerson);
 		
 		repo.save(userFadli);
-		
 	}
-	
 	@Test
 	public void testDeleteUser() {
 		Integer userId = 2;

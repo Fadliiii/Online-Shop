@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sc="https://www.thymeleaf.org/tyhmeleaf-extras-springsecurity6">
+<head th:replace="fragments :: page_head('Users - Shopme Admin')"></head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="navigation :: menu"></div>
+
+		<div>
+			<h2>Manage Brands</h2>
+			<a th:href="@{/brands/new}"
+				class="fa-solid fa-folder-plus fa-2x icon-dark mr-2"></a>
+			&nbsp;|&nbsp; <a th:href="@{/category/export/csv}"
+				class="fa-solid fa-file-csv fa-2x icon-dark mr-2"></a>
+		</div>
+	</div>
+
+		<div th:replace = "fragments :: search_form_and_message('/brands/page/1')"></div>
+	
+	<div class="full-details">
+		<table
+			class="table table-bordered table-striped table-hover table-responsive-xl">
+			<thead class="table-dark">
+				<tr>
+					<th>ID</th>
+					<th>Logo</th>
+					<th>Brand Name</th>
+					<th>Categories</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="brands : ${listBrands}">
+					<td>[[${brands.id}]]</td>
+					<td>
+					
+					</td>
+					<td>[[${brands.name}]]</td>
+					<td>
+						<th:block th:each="cat : ${brands.categories}">
+						<span class="badge bg-secondary" th:text="${cat.name}"></span>
+						</th:block>
+					</td>
+					<td>
+						<div th:replace="fragments :: edit('brands','/brand/edit/'+${brands.id})"/>
+						&nbsp;
+						<div th:replace="fragments :: delete('brands',${brands.id},'/brands/delete/'+${brands.id},true)"/>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+		
+		
+	<div th:replace="modal_fragment :: confirm_modal"></div>
+
+	<div th:replace="fragments :: footer"></div>
+
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>
