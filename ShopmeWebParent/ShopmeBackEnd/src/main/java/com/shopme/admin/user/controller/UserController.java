@@ -180,7 +180,7 @@ public class UserController {
 		exporter.export(listUser, response);
 	}
 	@GetMapping("/users/export/pdf")
-	public void exxportToPdf(HttpServletResponse response) throws IOException {
+	public void exportToPdf(HttpServletResponse response) throws IOException {
 		List<User>listUser = service.listAll();
 		UserExportToPdf exporter = new UserExportToPdf();
 		exporter.exporter(listUser, response);

@@ -22,18 +22,18 @@
 			class="table table-bordered table-striped table-hover table-responsive-xl">
 			<thead class="table-dark">
 				<tr>
-					<th>ID</th>
+					<th class="hideable-column">ID</th>
 					<th>Logo</th>
-					<th>Brand Name</th>
+					<th th:replace="fragments :: column_link('/brands','name','Brand Name','none')">
 					<th>Categories</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="brands : ${listBrands}">
-					<td>[[${brands.id}]]</td>
+					<td class="hideable-column">[[${brands.id}]]</td>
 					<td>
-					
+						<img th:src="@{${brands.logoPath}}" style="width:100px" class="img-fluid"/>
 					</td>
 					<td>[[${brands.name}]]</td>
 					<td>
@@ -42,7 +42,7 @@
 						</th:block>
 					</td>
 					<td>
-						<div th:replace="fragments :: edit('brands','/brand/edit/'+${brands.id})"/>
+						<div th:replace="fragments :: edit('brands','/brands/edit/'+${brands.id})"/>
 						&nbsp;
 						<div th:replace="fragments :: delete('brands',${brands.id},'/brands/delete/'+${brands.id},true)"/>
 					</td>
@@ -50,7 +50,24 @@
 			</tbody>
 		</table>
 	</div>
+	
+	<div class="less-details">
+		 <div th:each = "brands : ${listBrands}" class="row m-1">
+			<div class="col-4">
+				<img th:src="@{${brands.logoPath}}" style="width:100px" class="img-fluid"/>
+			</div>
+			<div class="col-8">
+				<div>[[${brands.name}]]</div>
+		 			<div class="mt-2 d-flex align-items-center gap-2">
+						<div th:replace="fragments :: edit('brands','/brands/edit/'+${brands.id})"/>
+						&nbsp;
+						<div th:replace="fragments :: delete('brands',${brands.id},'/brands/delete/'+${brands.id},true)"/>
+		 			</div>
+		 		</div>
+	</div>
+</div>	
 		
+	<div th:replace="fragments :: pagination('/brands','brands')"></div>
 		
 	<div th:replace="modal_fragment :: confirm_modal"></div>
 
@@ -58,6 +75,13 @@
 
 <script th:src="@{/js/common_list.js}"></script>
 <script type="text/javascript">
+
+		$(document).ready(function(e){
+			$(".link-delete").on("click",function(e){
+				e.preventDefault();
+				showDeleteConfirmModal($(this),'brand')
+			});
+		});
 
 </script>
 </body>

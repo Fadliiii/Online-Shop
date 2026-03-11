@@ -112,7 +112,8 @@ public class CategoryController {
 			List<Category>listCategories= categoryService.listCategoriesUsedInForm();
 			model.addAttribute("listCategories",listCategories);
 			model.addAttribute("category", category);
-			
+			model.addAttribute("pageTitle","Edit Categoty (ID : "+ id+ ")");
+
 			return"category/category_form";
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());

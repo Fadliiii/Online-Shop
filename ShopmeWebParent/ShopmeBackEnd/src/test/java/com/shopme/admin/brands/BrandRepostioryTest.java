@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
@@ -17,6 +19,7 @@ import org.springframework.util.Assert;
 import org.webjars.NotFoundException;
 
 import com.shopme.admin.brand.BrandRepository;
+import com.shopme.admin.brand.BrandService;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
 
@@ -28,6 +31,7 @@ public class BrandRepostioryTest {
 	@Autowired
 	private BrandRepository repository;
 
+	
 	@Autowired
 	private TestEntityManager entityManager;
 	
@@ -98,4 +102,6 @@ public class BrandRepostioryTest {
 		repository.delete(brand);
 		assertFalse(repository.findById(brandId).isPresent());
 	}
+	
+
 }

@@ -22,9 +22,10 @@
 			<h2>Manage Category | [[${pageTitle}]]</h2>
 		</div>
 
-		<form th:action="@{/brands/new}" method="post"
+		<form th:action="@{/brands/save}" method="post"
 			style="max-width: 500px; margin: 0 auto"
 			enctype="multipart/form-data" 
+			onsubmit="return checkUnique(this)"
 			th:object="${brand}">
 			<input type="hidden" th:field="*{id}">
 			<div class="border border-secondary rounded p-3">
@@ -42,7 +43,7 @@
 					<div class="col-sm-8 mt-2">
 						<input type="hidden" th:field="*{logo}" /> 
 						<input type="file" id="fileImage" name="fileImage" accept="image/png, image/jpeg"
-							required 
+							th:required="${brand.id == null}"
 							class="mb-2" />
 						<div class="mt-2">
 							<img id="thumbnail" alt="image Review"
@@ -90,7 +91,9 @@
 		$(document).ready(function(){
 			dropdownCategories = $("#categories");
 			divChosenCategories = $("#chosenCategories");
-		
+			
+		    showChosenCategories(); // tambahkan ini
+			
 			dropdownCategories.change(function(){
 				divChosenCategories.empty();
 				showChosenCategories();
@@ -106,6 +109,36 @@
 
 				divChosenCategories.append("<span class='badge bg-secondary m-1'>" + catName + "</span>");
 			});
+		}
+		
+		
+		function checkUnique(form){
+			let brandId = $("#id").val();
+			let brandName = $("#name").val();
+			
+			csrfValue = $("input[name='_csrf']").val();
+
+			let url = "[[@{/brands/check_unique}]]"
+			
+			let param = {
+					id: brandId,
+					name: brandName,
+					_csrf :csrfValue
+			};
+			
+			$.post(url,param,function(response){
+				
+				if(response == "OK"){
+					form.submit();
+				}
+				else if (response == "Duplicate"){
+					showWarningModal("Brand name already exist!"+brandName);
+				}
+				
+			}).fail(function(){
+				showErrorModal("Could not connect to server");
+			});
+			return false;
 		}
 	</script>
 	<script th:src="@{/js/common_form.js}"></script>
