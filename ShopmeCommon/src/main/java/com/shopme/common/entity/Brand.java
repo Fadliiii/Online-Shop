@@ -29,11 +29,11 @@ public class Brand {
 	private String name;
 
 	@Column(nullable = false, length = 128)
-	private String logo =DEFAULT_LOGO;
+	private String logo;
 	
 	@ManyToMany
 	@JoinTable(
-			name = "brand_categories",
+			name = "brands_categories",
 			joinColumns = @JoinColumn(name= "brands_id"),
 			inverseJoinColumns = @JoinColumn(name="category_id")
 			)
