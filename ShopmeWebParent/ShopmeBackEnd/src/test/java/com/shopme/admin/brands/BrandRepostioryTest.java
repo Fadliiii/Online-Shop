@@ -73,7 +73,7 @@ public class BrandRepostioryTest {
 	@Test
 	public void findAllBrand() {
 		List<Brand> listBrands = repository.findAll();
-		listBrands.forEach(brand->System.out.print(brand));
+		listBrands.forEach(brand->System.out.println(brand));
 	}
 	
 	@Test
