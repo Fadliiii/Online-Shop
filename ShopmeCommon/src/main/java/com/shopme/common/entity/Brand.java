@@ -50,6 +50,13 @@ public class Brand {
 	}	
 
 	
+	public Brand(Integer id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+
 	public Brand(String name) {
 		super();
 		this.name = name;
