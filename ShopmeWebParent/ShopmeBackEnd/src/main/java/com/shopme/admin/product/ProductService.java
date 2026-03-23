@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.shopme.common.entity.Product;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class ProductService {
 
 		@Autowired
@@ -49,5 +52,19 @@ public class ProductService {
 				}
 			}
 			return "OK";
+		}
+		
+		public void updateEnabledProduct( Integer id, boolean enabled) {
+			repository.updateEnabledStatus(id, enabled);
+		}
+		
+		public void deleteProduct(Integer id) throws ProductNotFoundException {
+			Long countById = repository.countById(id);
+			
+			if(countById == null || countById == 0) {
+				throw new ProductNotFoundException("product id = "+ id + " is not exist !");
+			}
+			
+			repository.deleteById(id);
 		}
 }

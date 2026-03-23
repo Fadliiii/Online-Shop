@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.webjars.NotFoundException;
 
 import com.shopme.admin.brand.BrandService;
 import com.shopme.common.entity.Brand;
@@ -53,8 +55,32 @@ public class ProductController {
 		attributes.addFlashAttribute("message","The product has been saved sucessfully.");
 
 		return"redirect:/products";
-
 	}
-
 	
+	
+	@GetMapping("/{id}/enabled/{enabled}")
+	public String updateStatusEnabledProduct(@PathVariable Integer id,
+			@PathVariable boolean enabled,
+			RedirectAttributes redirectAttributes) {
+		
+		service.updateEnabledProduct(id, enabled);
+		
+		String status = enabled?"enabled" : "disabled";
+		String message ="The Product ID "+id+" has been "+ status;
+		redirectAttributes.addFlashAttribute("message", message);
+		return"redirect:/products";
+	}
+	
+	@GetMapping("/delete/{id}")
+	public String deleteProduct(@PathVariable("id") Integer id,
+			RedirectAttributes redirectAttributes) throws ProductNotFoundException {
+		try {
+			service.deleteProduct(id);
+			redirectAttributes.addFlashAttribute("message", "This product ID = " + id + " has been deleted successfully");
+
+		} catch (NotFoundException e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+		}
+		return"redirect:/products";
+	}
 }
