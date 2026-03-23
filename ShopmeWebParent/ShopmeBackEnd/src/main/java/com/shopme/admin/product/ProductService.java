@@ -35,4 +35,19 @@ public class ProductService {
 			
 			return repository.save(product);
 		}
+		
+		public String checkUniqueProductName(Integer id, String name) {
+			boolean isCreatingNew=(id == null || id == 0);//kondisi awal null/tidak ada data, inputan null dan lenovo legion5i
+			Product productByName = repository.findByName(name);// findByName = null karena data awal kosong
+			if(isCreatingNew) {//true
+				if(productByName != null) {// null!=null false
+					return "DUPLICATE";
+				}
+			}else {
+				if(productByName !=null && productByName.getId() != id ) {
+					return "DUPLICATE";
+				}
+			}
+			return "OK";
+		}
 }

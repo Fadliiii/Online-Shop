@@ -211,6 +211,15 @@ public class Product {
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + "]";
 	}
+
+	public Product(String name) {
+		super();
+		this.name = name;
+	}
+
+	public Product() {
+		super();
+	}
 	
 	
 	

@@ -15,6 +15,7 @@
 		</div>
 
 		<form th:action="@{/products/save}" method="post"
+			onsubmit="return checkUnique(this)"
 			th:object="${product}">
 			<input type="hidden" th:field="*{id}">
 			<div>
@@ -102,6 +103,35 @@
 				});
 			});
 			
+		}
+		
+		function checkUnique(form){
+			let productId = $("#id").val();
+			let productName = $("#name").val();
+			
+			csrfValue = $("input[name='_csrf']").val();
+
+			let url = "[[@{/products/check_unique}]]"
+			
+			let param = {
+					id: productId,
+					name: productName,
+					_csrf :csrfValue
+			};
+			
+			$.post(url,param,function(response){
+				
+				if(response == "OK"){
+					form.submit();
+				}
+				else if (response == "DUPLICATE"){
+					showWarningModal("Product name already exist!"+productName);
+				}
+				
+			}).fail(function(){
+				showErrorModal("Could not connect to server");
+			});
+			return false;
 		}
 	</script>
 	<script th:src="@{/js/common_form.js}"></script>
