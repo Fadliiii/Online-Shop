@@ -100,4 +100,20 @@ public class ProductRepositoryTest {
 		Optional<Product> result = repository.findById(id);
 		assertThat(!result.isPresent());
 	}
+	
+	@Test
+	public void testSaveProductWithImages() {
+		Integer id= 1;
+		Product product = repository.findById(id).get();
+		
+		product.setMainImage("main image.jpg");
+		product.addExtraImage("extra image 1.png");
+		product.addExtraImage("extra image 2.png");
+		product.addExtraImage("extra image 3.png");
+		
+		Product saveProduct = repository.save(product);
+
+		assertThat(saveProduct.getImages().size()).isEqualTo(3);
+		
+	}
 }
