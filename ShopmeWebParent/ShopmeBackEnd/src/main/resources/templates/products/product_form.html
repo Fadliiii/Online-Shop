@@ -59,7 +59,15 @@
 					<div class="tab-pane" id="images" role="tabpanel">
 						<div th:replace="products/product_images"></div>
 					</div>
-					<div class="tab-pane" id="details" role="tabpanel">Details</div>
+					
+					<div class="tab-pane p-2" id="details" role="tabpanel">
+						<div th:replace="products/product_details :: content"></div>
+						<div class="m-2">
+							<input type="button" class="btn btn-secondary p-2" value="Add More Details"
+							onclick="addNextDetailSection()">
+						</div>
+					</div>
+				
 					<div class="tab-pane" id="shipping" role="tabpanel">
 					 	<div th:replace="products/product_shipping"></div>
 					</div>
@@ -84,7 +92,9 @@
 		 checkUniqueUrl = "[[@{/products/check_unique}]]"
 
 	</script>
-	<script th:src="@{/js/product_form.js}"></script>
+	<script th:src="@{/js/product_form_images.js}"></script>
+	<script th:src="@{/js/product_form_overview.js}"></script>
+	<script th:src="@{/js/product_form_details.js}"></script>
 	<script th:src="@{/js/common_form.js}"></script>
 </body>
 </html>
