@@ -1,12 +1,13 @@
 # Shopme Admin System
 
-Admin management system for an e-commerce platform built using **Java 17**, **Spring Boot**, and **Spring MVC**.
+Admin management system for an e-commerce platform built with Java 17, Spring Boot, and Spring MVC.
 
-This project demonstrates how to build a server-side rendered web application using **Spring MVC, Thymeleaf, and Spring Data JPA**.
+This project demonstrates a hybrid architecture combining:
 
-The system allows administrators to manage users, categories, brands, and products.
+Server-side rendering (Thymeleaf)
+Partial REST API (AJAX-based interactions)
 
----
+Designed to simulate a real-world admin panel with authentication, role management, and scalable data handling.
 
 ## Preview
 
@@ -25,7 +26,7 @@ Backend
 * Spring MVC
 * Spring Data JPA
 * Hibernate
-* Spring Security
+* Spring Security(JWT)
 
 Frontend
 
@@ -45,31 +46,24 @@ Build Tool
 
 ## Features
 
-### User Management
-
-* Create new users
-* Edit user information
-* Enable / disable user accounts
-* Assign roles
-
-### Category Management
-
-* Create and update categories
-* Hierarchical category structure
-* Upload category images
-
-### Brand Management
-
-* Associate brands with categories
-* CRUD operations
-
-### Product Management
-
-* Add and edit products
-* Upload product images
-* Assign products to categories and brands
-
----
+⚙️ Core Features
+🔐 Authentication & Authorization
+Login system with JWT token
+Role-based access control (Admin/User roles)
+👥 User Management
+Create, update, enable/disable users
+Assign roles dynamically
+🗂️ Category Management
+Hierarchical categories
+Image upload support
+🏷️ Brand Management
+Associate brands with categories
+Full CRUD operations
+📦 Product Management
+Add/edit products
+Upload multiple product images
+Assign categories & brands
+Pagination + filtering support---
 
 ## Backend Architecture
 
@@ -191,5 +185,3 @@ Through this project I learned:
 Fadli
 Junior Backend Developer (Java Spring Boot)
 
-GitHub
-https://github.com/yourusername
