@@ -14,6 +14,7 @@ function addNextDetailSection(){
 	
 	htmlDetailSection=`
 	<div class="d-flex align-items-center" id="divDetail${divDetailsCount}">
+			<input type="hidden" name="detailsID" value="0" /> 
 			<label class="m-3">Name: </label>
 			<input type="text" class="form-control w-25" name="detailsNames" maxlength="255">
 			<label class="m-3">Value: </label>
