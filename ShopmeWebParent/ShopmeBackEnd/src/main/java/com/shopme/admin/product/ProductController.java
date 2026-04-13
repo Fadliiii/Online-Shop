@@ -41,9 +41,12 @@ public class ProductController {
 	@GetMapping("")
 	public String listAll(Model model) {
 		List<Product> listProducts = service.listAll();
-		
+	
 		model.addAttribute("listProducts", listProducts); 
-		
+		for (Product p : listProducts) {
+		    System.out.println("ID: " + p.getId());
+		    System.out.println("Category: " + p.getCategory());
+		}
 		return "products/products";
 	}
 	
@@ -87,6 +90,21 @@ public class ProductController {
 		attributes.addFlashAttribute("message","The product has been saved sucessfully.");
 
 		return"redirect:/products";
+	}
+	
+	@GetMapping("/detail/{id}")
+	public String getDetailProductById(@PathVariable("id") Integer id ,Model model,RedirectAttributes redirectAttributes) {
+		try {
+			Product product = service.get(id);
+
+			model.addAttribute("pageTitle", "Product Details");
+			model.addAttribute("product", product);
+			return "products/product_modal_detail";
+		}catch (ProductNotFoundException e){
+			redirectAttributes.addFlashAttribute("message",e.getMessage());
+		}
+			return"redirect:/products";
+
 	}
 		
 	private void deleteExtraImagesWeredRemoveOnForm(Product product) {
