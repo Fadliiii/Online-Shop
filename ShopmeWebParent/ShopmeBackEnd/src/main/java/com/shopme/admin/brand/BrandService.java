@@ -29,7 +29,9 @@ public class BrandService {
 	}
 	
 	public Page<Brand> listByPage(int pageNum,String sortField, String sortDir, String keyword){
+		
 		Sort sort= Sort.by(sortField);
+	
 		sort = sortDir.equals("asc")?sort.ascending() : sort.descending();
 		
 		org.springframework.data.domain.Pageable pageable =  PageRequest.of(pageNum -1, BRANDS_PER_PAGE, sort);

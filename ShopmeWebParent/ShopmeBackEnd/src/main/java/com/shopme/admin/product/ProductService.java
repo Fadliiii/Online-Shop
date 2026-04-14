@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.shopme.common.entity.Product;
@@ -15,11 +19,27 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class ProductService {
 
+		public static final int PRODUCT_PER_PAGE =5;
+
 		@Autowired
 		ProductRepository repository;
 		
 		public List<Product> listAll(){
 			return repository.findAll();
+		}
+		
+		public Page<Product> listByPage(int pageNum,String sortField, String sortDir, String keyword){
+			Sort sort = Sort.by(sortField);
+			
+			sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+			
+			Pageable pageable = PageRequest.of(pageNum - 1,PRODUCT_PER_PAGE,sort);//pagenum PageSize,Sort
+			
+			if(keyword != null) {
+		    return	repository.findAll(keyword, pageable);
+			}
+			 
+			return repository.findAll(pageable);	
 		}
 		
 		public Product saveProduct(Product product) {
