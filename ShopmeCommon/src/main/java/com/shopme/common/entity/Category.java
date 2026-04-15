@@ -44,6 +44,8 @@ public class Category {
 	@OneToMany(mappedBy = "parent")
 	private Set<Category> children = new HashSet<>();
 
+	@Column(name = "all_parent_id",nullable = true)
+	private String allParentIDs; 
 	
 //	@Override
 //	public int hashCode() {
@@ -207,6 +209,22 @@ public class Category {
 		this.children = children;
 	}
 	
+	
+	
+	public String getAllParentIDs() {
+		return allParentIDs;
+	}
+
+
+
+
+	public void setAllParentIDs(String allParentIDs) {
+		this.allParentIDs = allParentIDs;
+	}
+
+
+
+
 	@Transient
 	public String getImagePath() {
 		if(this.id == null) return "/images/image-thumbnail.png";

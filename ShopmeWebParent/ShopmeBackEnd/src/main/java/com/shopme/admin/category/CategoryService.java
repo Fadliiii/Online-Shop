@@ -130,7 +130,7 @@ public class CategoryService {
 	}
 	
 	public Category save (Category category,MultipartFile multipartFile) throws IOException {
-		
+		handleParent(category);
 		if (multipartFile != null && !multipartFile.isEmpty()) {
 			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 			category.setImage(fileName);
@@ -262,5 +262,15 @@ public class CategoryService {
 			throw new NotFoundException("Could Not find any category = "+ id);
 		}
 		categoryRepository.deleteById(id);
+	}
+	
+	public void handleParent(Category category) {
+		Category parent = category.getParent();
+		if(parent != null) {
+			String allParenrtIds = parent.getAllParentIDs() == null ? "-" : parent.getAllParentIDs();
+			allParenrtIds += String.valueOf(parent.getId()+ "-");
+			category.setAllParentIDs(allParenrtIds);
+		}
+		return;
 	}
 }
