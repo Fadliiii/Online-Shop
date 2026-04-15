@@ -22,7 +22,7 @@
 <body>
 	<th th:fragment="column_link(moduleUrl,fieldName,columnLabel,cssClass)" th:classappend="${cssClass}"><a
 		class="text-white text-decoration-none"
-		th:href=" @{${moduleUrl}+'/page/'+ ${currentPage} +'?sortField=' +${fieldName}+'&sortDir=' + ${sortField != fieldName ? sortDir:reverseSortDir}+ ${keyword !=null?'&keyword='+keyword:''}}">
+		th:href=" @{${moduleUrl}+'/page/'+ ${currentPage} +'?sortField=' +${fieldName}+'&sortDir=' + ${sortField != fieldName ? sortDir:reverseSortDir}+ ${keyword !=null?'&keyword='+keyword:''}+ ${categoryId != null ? '&categoryId='+ categoryId: ''}}">
 			[[${columnLabel}]] </a>
 			 <span th:if="${sortField == fieldName}"
 		th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }"></span>
@@ -36,7 +36,7 @@
 			sortField=${sortField},
 			sortDir=${sortDir},
 			keyword=${keyword}
-			)}">[[${label}]]</a>
+			)}+ ${categoryId != null ? '&categoryId='+ categoryId: ''}">[[${label}]]</a>
 
 <div th:fragment="footer" class="text-center m-3">
 			<p>Shopme Control Panel - Copyright &copy; Shopme</p>
