@@ -50,6 +50,16 @@ public class ProductService {
 			return repository.findAll(pageable);	
 		}
 		
+		public void saveProductPrice(Product productInForm) {
+			
+			Product productInDb  = repository.findById(productInForm.getId()).get();
+			productInDb.setCost(productInForm.getCost());
+			productInDb.setPrice(productInForm.getPrice());
+			productInDb.setDiscountPercent(productInForm.getDiscountPercent());
+			
+			repository.save(productInDb);
+		}
+		
 		public Product saveProduct(Product product) {
 			if(product.getId()==null) {
 				product.setCreatedTime(new Date());
