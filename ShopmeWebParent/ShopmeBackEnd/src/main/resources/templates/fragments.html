@@ -20,8 +20,8 @@
 
 </head>
 <body>
-	<th th:fragment="column_link(moduleUrl,fieldName,columnLabel,cssClass)" th:classappend="${cssClass}"><a
-		class="text-white text-decoration-none"
+	<th th:fragment="column_link(moduleUrl,fieldName,columnLabel,removeTag)" th:remove="${removeTag}">
+	<a class="text-white text-decoration-none"
 		th:href=" @{${moduleUrl}+'/page/'+ ${currentPage} +'?sortField=' +${fieldName}+'&sortDir=' + ${sortField != fieldName ? sortDir:reverseSortDir}+ ${keyword !=null?'&keyword='+keyword:''}+ ${categoryId != null ? '&categoryId='+ categoryId: ''}}">
 			[[${columnLabel}]] </a>
 			 <span th:if="${sortField == fieldName}"
@@ -62,7 +62,6 @@
 			<a class="fas fa-edit fa-2x icon-green"
 			th:href="@{${editURL}}"
 			title="'Edit this'+${entityName}"></a>
-			&nbsp;
 		</div>
 		<div th:fragment="delete(entityName,entityId,deleteURL,visible)" th:remove="tag">
 			<th:block th:if="${visible}">

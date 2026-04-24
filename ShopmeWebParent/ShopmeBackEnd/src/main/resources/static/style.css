@@ -13,7 +13,11 @@
 .icon-dark {
     color: #333 !important;
 }
-
+.icon-group {
+    display: flex;
+    flex-direction: column; /* default: ke bawah */
+    gap: 6px;
+}
 
 
 
@@ -21,6 +25,7 @@
 	
     div.full-details { display: none }
     div.less-details { display: block; }
+    
 }
 @media screen and (min-width: 769px) and (max-width: 1023px){
 	/* Medium screen */
@@ -32,4 +37,7 @@
 	/* Large screen*/
 	 div.less-details { display: none; }
 	 .hideable-column{ display: table-cell}
+	  .icon-group {
+        flex-direction: row;
+    }
 }
