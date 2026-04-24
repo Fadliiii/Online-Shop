@@ -28,18 +28,13 @@
 			<thead class="table-dark">
 				<tr>
 
-
-					<th th:replace="fragments :: column_link('/users','id','User ID','hideable-column')" />
-
+					<th class="hideable-column"><th th:replace="fragments :: column_link('/users','id','User ID','tag')" /></th>
 					<th>Photos</th>
-					<th
-						th:replace="fragments :: column_link('/users','email','Email','hideable-column')" />
-					<th
-						th:replace="fragments :: column_link('/users','firstName','First Name','')" />
-					<th
-						th:replace="fragments :: column_link('/users','lastName','Last Name','')">
+					<th class="hideable-column"><th	th:replace="fragments :: column_link('/users','email','Email','tag')" /></th>
+					<th th:replace="fragments :: column_link('/users','firstName','First Name','none')" />
+					<th	th:replace="fragments :: column_link('/users','lastName','Last Name','none')">
 					<th>Roles</th>
-					<th th:replace="fragments :: column_link('/users','enabled','Enabled','')" />
+					<th th:replace="fragments :: column_link('/users','enabled','Enabled','none')" />
 					<th></th>
 				</tr>
 			</thead>
