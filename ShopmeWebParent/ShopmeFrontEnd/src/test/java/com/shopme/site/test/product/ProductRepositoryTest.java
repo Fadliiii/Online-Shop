@@ -1,5 +1,7 @@
 package com.shopme.site.test.product;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,14 @@ public class ProductRepositoryTest {
 		products.forEach(product -> {
 			System.out.println(product.getName()+"("+product.isEnabled()+")");
 		});
+	}
+	
+	@Test
+	public void findProductByAlis() {
+		String alias = "something";
+		Product product =productRepository.findByAlias(alias);
+		
+		assertThat(product.getId()).isEqualTo(2);
 	}
 
 }

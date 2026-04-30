@@ -18,4 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	        + "OR p.category.allParentIDs LIKE CONCAT('%', ?2, '%')) "
 	        + "ORDER BY p.name ASC")
 	public Page<Product> listByCategory(Integer categoryId,String categoryIdMatch,Pageable pageable);
+
+	
+	public Product findByAlias(String alias);
 }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.shopme.common.entity.Category;
 import com.shopme.common.entity.Product;
+import com.shopme.common.exception.CategoryNotFoundException;
+import com.shopme.common.exception.ProductNotFoundException;
 import com.shopme.site.category.CategoryService;
 
 @Controller
@@ -29,11 +31,11 @@ public class ProductController {
 	public String viewCategoryByPage (@PathVariable ("category_alias") String alias,
 			@PathVariable("pageNum")int pageNum,
 			Model model) {
+		try {
+			
 		
 		Category category = categoryService.getCategory(alias);	
-		if(category == null) {
-			return"error/404";
-		}
+		
 		List<Category> listCategoryParents = categoryService.getCategoryParents(category);
 		Page<Product>pageProducts = productService.listByCategory(pageNum, category.getId());
 		List<Product>listProducts = pageProducts.getContent();
@@ -54,6 +56,25 @@ public class ProductController {
 		model.addAttribute("pageTitle", category.getName());
 		model.addAttribute("listCategoryParents", listCategoryParents);
 		model.addAttribute("category", category);
-		return "product_view_by_category";
+		return "product/product_view_by_category";
+	}catch(CategoryNotFoundException e){
+		return "error/404";
+	}
+}
+
+	@GetMapping("/p/{product_alias}")
+	public String viewProductDetail(@PathVariable("product_alias") String alias,
+			Model model) {
+		try {
+		Product product = productService.getProductByAlias(alias);
+		List<Category> listCategoryParents = categoryService.getCategoryParents(product.getCategory());
+		model.addAttribute("listCategoryParents", listCategoryParents);
+		model.addAttribute("product", product);
+		model.addAttribute("pageTitle", product.getShortName());
+			return "product/product_detail";
+			
+		}catch (ProductNotFoundException e) {
+			return "error/404";
+		}
 	}
 }

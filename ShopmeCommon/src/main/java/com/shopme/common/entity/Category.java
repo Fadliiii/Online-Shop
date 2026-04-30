@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.springframework.core.annotation.Order;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 @Entity
@@ -42,6 +45,7 @@ public class Category {
 	private Category parent;
 	
 	@OneToMany(mappedBy = "parent")
+	@OrderBy("name asc")
 	private Set<Category> children = new HashSet<>();
 
 	@Column(name = "all_parent_id",nullable = true)
