@@ -45,4 +45,11 @@ public class SettingRepositoryTest {
 		assertThat(iterable).size().isGreaterThan(0);
 		
 	}
+	
+	@Test
+	public void testListSettingByCategory() {
+		
+		List<Setting>settings = settingRepository.findByCategory(SettingCategory.GENERAL);
+		settings.forEach(System.out::println);
+	}
 }

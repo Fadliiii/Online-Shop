@@ -44,4 +44,14 @@ public class CurrencyRepositoryTest {
 		
 		assertThat(iterable).size().isEqualTo(13);
 	}
+	
+	@Test 
+	public void testFindAllCurrenciescOrderByName() {
+    
+		List<Currency>currencies=currencyRepository.findAllByOrderByNameAsc();
+
+		currencies.forEach(c ->{
+			System.out.println(c);
+		});
+	}
 }

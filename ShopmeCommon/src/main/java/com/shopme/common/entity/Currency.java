@@ -27,6 +27,12 @@ public class Currency {
 
 	
 	
+	@Override
+	public String toString() {
+		return name+" - "+code+" - "+symbol;
+	}
+
+
 	public Currency() {
 		super();
 	}
