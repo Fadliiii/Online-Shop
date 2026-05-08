@@ -87,14 +87,14 @@ public class SettingController {
 		}
 	}
 	
-	private void updateSettingValuesFromForm(HttpServletRequest request, List<Setting> liSettings) {
-		for (Setting setting : liSettings) {
+	private void updateSettingValuesFromForm(HttpServletRequest request, List<Setting> listettings) {
+		for (Setting setting : listettings) {
 			String value = request.getParameter(setting.getKey());
 
 			if( value != null) {
 				setting.setValue(value);
 			}
 		}
-		settingService.saveAll(liSettings);
+		settingService.saveAll(listettings);
 	}
 }

@@ -73,6 +73,8 @@
 			<label class="col-sm-4 col-form-label">Decimal Digits:</label>
 			<div class="col-sm-8 p-2"> 
 				<select name="DECIMAL_DIGITS" class="form-control">
+				<option value="0"
+					th:selected="(${DECIMAL_DIGITS} == 0)">0</option>
 					<option value="1"
 					th:selected="(${DECIMAL_DIGITS} == 1)">1</option>
 					<option value="2"
