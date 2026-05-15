@@ -36,6 +36,20 @@ public class State {
 	}
 
 	
+	
+	public State(Integer id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	public State(Integer id, String name, Country country) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.country = country;
+	}
+
 	public State(String name, Country country) {
 		super();
 		this.name = name;
