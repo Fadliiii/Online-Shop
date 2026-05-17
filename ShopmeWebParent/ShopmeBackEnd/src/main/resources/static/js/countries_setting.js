@@ -30,7 +30,7 @@ $(document).ready(function(){
 		if(buttonAddCountry.val()=="Add"){
 			addCountry();
 		}else{
-			changeFormStateToNew();
+			changeFormStateToNewCountry();
 		}
 	});
 	
@@ -47,12 +47,18 @@ function deleteCountry(){
 	countryId = optionValue.split("-")[0];
 	url = contextPath +"countries/delete/"+countryId;
 	
-	$.get(url, function(){
+	$.ajax({
+				type: 'DELETE',
+				url: url,
+				beforeSend: function(xhr){
+					xhr.setRequestHeader(csrfHeaderName,csrfValue);
+				}
+			}).
+		done(function(){
 		$("#dropDownCountries option[value='"+optionValue+"']").remove();
-	}).done(function(){
 			buttonLoad.val("Refresh Country List");
 			showToastMessage("The country have been deleted");
-			changeFormStateToNew();
+			changeFormStateToNewCountry();
 		}).fail(function(){
 			showToastMessage("ERROR: Could not connect to server or server encountered an error")
 		});
@@ -91,7 +97,7 @@ function updateCountry(){
 			$("#dropDownCountries option:selected").text(countryName);
 			showToastMessage("The country has been updated country");
 			
-			changeFormStateToNew();
+			changeFormStateToNewCountry();
 		}).fail(function(){
 			showToastMessage("ERROR: Could not connect to server or server encountered an error");
 		});
@@ -166,7 +172,7 @@ function showToastMessage(message){
 	$(".toast").toast('show');
 }
 
-function changeFormStateToNew(){
+function changeFormStateToNewCountry(){
 	
 	
 	buttonAddCountry.val("Add");

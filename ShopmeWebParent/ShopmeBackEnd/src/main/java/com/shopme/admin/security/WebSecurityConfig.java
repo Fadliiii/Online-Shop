@@ -45,7 +45,7 @@ public class WebSecurityConfig{
 		
 		http.authorizeHttpRequests(
 				auth -> auth
-				.requestMatchers("/users/**").hasAuthority("Admin")
+				.requestMatchers("/users/**","/settings/**","/countries/**","/states/**").hasAuthority("Admin")
 				.requestMatchers("/category/**").hasAnyAuthority("Admin","Editor")
 				.requestMatchers("/brands/**").hasAnyAuthority("Admin","Editor")
 			
