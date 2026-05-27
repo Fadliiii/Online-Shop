@@ -1,5 +1,6 @@
 package com.shopme.site.setting;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,5 +20,11 @@ public class SettingService {
 		return  settingRepository.findByTwoCategories(SettingCategory.GENERAL, SettingCategory.CURRENCY);
 	}
 	
+	public EmailSettingBag getEmailSettingBag() {
+		List<Setting> settings =settingRepository.findByCategory(SettingCategory.MAIL_SERVER);
+		settings.addAll(settingRepository.findByCategory(SettingCategory.MAIL_TEMPLATES));
+		
+		return new EmailSettingBag(settings);
+	}
 	
 }

@@ -65,6 +65,8 @@ $.ajax({
 }
 
 function updateState(){
+	if(!validateFormState()) return;
+
 	url = contextPath+"states/save";
 	stateId = dropDownStates.val();
 	stateName = fieldStateName.val();
@@ -105,8 +107,17 @@ function updateState(){
 					showToastMessage("ERROR: Could not connect to server or server encountered an error")
 				});
 }
-
+function validateFormState(){
+	formState = document.getElementById("formState");
+	if(!formState.checkValidity()){
+		formState.reportValidity();
+		return false;
+	}
+	return true;
+}
 function addState(){
+	
+	if(!validateFormState()) return;
 	url = contextPath+"states/save";
 	
 	stateName = fieldStateName.val();

@@ -10,6 +10,7 @@ public class ShopmeFrontEndApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ShopmeFrontEndApplication.class, args);
+	
 	}
 
 }

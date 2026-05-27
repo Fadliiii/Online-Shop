@@ -65,6 +65,9 @@ function deleteCountry(){
 }
 
 function updateCountry(){
+	if(validateFormCounty())return;
+
+	
 	url = contextPath +"countries/save";
 		countryName = fieldCountryName.val();
 		countryCode = fieldCountryCode.val();
@@ -103,7 +106,18 @@ function updateCountry(){
 		});
 }
 
+function validateFormCounty(){
+	formCountry = document.getElementById("formCountry");
+	if(!formCountry.checkValidity()){
+		formCountry.reportValidity();
+		return false;
+	}
+	return true;
+}
+
 function addCountry(){
+
+	if(!validateFormCounty())return;
 	url = contextPath +"countries/save";
 	countryName = fieldCountryName.val();
 	countryCode = fieldCountryCode.val();

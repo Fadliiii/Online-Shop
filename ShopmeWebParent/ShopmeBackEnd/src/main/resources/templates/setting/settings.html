@@ -62,11 +62,11 @@
 				</div>
 
 				<div class="tab-pane p-2" id="mailServer" role="tabpanel">
-					<h2>Mail Server</h2>
+					<div th:replace="setting/mail_server :: content"></div>
 				</div>
 
 				<div class="tab-pane" id="mailTemplates" role="tabpanel">
-					<h2>Mail Templates</h2>
+					<div th:replace="setting/mail_templates/mail_template :: content"></div>	
 				</div>
 				<div class="tab-pane" id="payment" role="tabpanel">
 					<h2>Payement</h2>
@@ -90,7 +90,12 @@
 		contextPath="[[@{/}]]";
 		var csrfHeaderName="[[${_csrf.headerName}]]";
 		var csrfValue = "[[${_csrf.token}]]";
-		</script>
+		
+	$(document).ready(function(){
+		$("#customerVerificationContent").richText();
+	});
+		
+	</script>
 	<script th:src="@{/js/common_form.js}"></script>
 	<script th:src="@{/js/countries_setting.js}"></script>
 	<script th:src="@{/js/states_setting.js}"></script>

@@ -5,14 +5,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.shopme.admin.currency.CurrencyRepository;
 import com.shopme.common.entity.Setting;
 import com.shopme.common.entity.SettingCategory;
 
 @Service
 public class SettingService {
 
+    private final CurrencyRepository currencyRepository;
+
 	@Autowired private SettingRepository settingRepository;
+
+    SettingService(CurrencyRepository currencyRepository) {
+        this.currencyRepository = currencyRepository;
+    }
 	
 	public List<Setting> listAllSetting(){
 		return settingRepository.findAll();
@@ -33,5 +39,13 @@ public class SettingService {
 	
 	public void saveAll(Iterable<Setting> settings){
 		settingRepository.saveAll(settings);
+	}
+	
+	public List<Setting> getMailServerSettings(){
+		return settingRepository.findByCategory(SettingCategory.MAIL_SERVER);
+	}
+	
+	public List<Setting> getMailTemplatesSettings(){
+		return settingRepository.findByCategory(SettingCategory.MAIL_TEMPLATES);
 	}
 }
