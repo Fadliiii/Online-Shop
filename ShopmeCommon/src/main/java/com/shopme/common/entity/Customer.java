@@ -55,19 +55,19 @@ public class Customer {
 	@Column(name = "created_time")
 	private Date createdTime;
 	
-	private Boolean enabled;
+	private boolean enabled;
 	
 	@ManyToOne
 	@JoinColumn(name ="country_id")
 	private Country country;
 
 	
-	public Boolean isEnabled() {
+	public boolean isEnabled() {
 		return enabled;
 	}
 
 
-	public void setEnabled(Boolean enabled) {
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
