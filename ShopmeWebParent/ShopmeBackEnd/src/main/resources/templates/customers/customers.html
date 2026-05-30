@@ -61,8 +61,7 @@
 					<td class="hideable-column">[[${customer.state}]]</td>
 					<td>[[${customer.country.name}]]</td>
 					<td>
-						<div
-							th:replace="fragments :: status(${customer.enabled},'customer','/customers/'+${customer.id})"></div>
+						<div th:replace="fragments :: status(${customer.enabled},'customer','/customers/'+${customer.id})"></div>
 					</td>
 					<td><a class="fas fa-file-alt fa-2x icon-green link-detail"
 						th:href="@{'/customers/detail/'+ ${customer.id}}"

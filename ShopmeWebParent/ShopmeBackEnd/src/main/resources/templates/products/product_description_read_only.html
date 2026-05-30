@@ -2,14 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 	<div th:fragment="content" th:remove="tag">
-		
-		<div class="form-group row mt-2">
-			<label class="col-sm-3 col-form-label ">Address Line 1:</label>
-			<div class="col-sm-9 ">
-				<input type="text" class="form-control"	th:value="${customer.fullName}" readonly />
-			</div>
+		<div class="m-2">
+			<label>Short Description</label>
+			<div th:utext="${product.shortDescription}" class="border p-2 m-2"></div>
 		</div>
-		
+
+		<div class="m-2">
+			<label>Full Description</label>
+			<div th:utext="${product.fullDescription}" class="border p-2 m-2"></div>
+		</div>
 	</div>
 </body>
 </html>
