@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import com.shopme.admin.country.CountryRepository;
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.Customer;
 
@@ -29,18 +30,8 @@ public class CustomerService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public Page<Customer> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
-
-		Sort sort = Sort.by(sortField);
-		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-
-		Pageable pageable = PageRequest.of(pageNum - 1, CUSTOMER_PER_PAGE, sort);
-
-		if (keyword != null) {
-			return customerRepository.findAll(keyword, pageable);
-		}
-
-		return customerRepository.findAll(pageable);
+	public void listByPage(int pageNum, PagingAndSortingHelper helper) {
+		helper.listEntities(pageNum,CUSTOMER_PER_PAGE, customerRepository);
 	}
 
 	public void updateCustomerEnabledStatus(Integer id, boolean enabled) {
@@ -70,13 +61,19 @@ public class CustomerService {
 	}
 	
 	public void save(Customer customerInForm) {
+		Customer customerInDb = customerRepository.findById(customerInForm.getId()).get();
+
 		if(!customerInForm.getPassword().isEmpty()) {
 			String encodePassword = passwordEncoder.encode(customerInForm.getPassword());
 			customerInForm.setPassword(encodePassword);
 		}else {
-			Customer customerInDb = customerRepository.findById(customerInForm.getId()).get();
 			customerInForm.setPassword(customerInDb.getPassword());
 		}
+		
+		customerInForm.setEnabled(customerInDb.isEnabled());
+		customerInForm.setCreatedTime(customerInDb.getCreatedTime());
+		customerInForm.setVerificationCode(customerInDb.getVerificationCode());
+		
 		customerRepository.save(customerInForm);
 	}
 	

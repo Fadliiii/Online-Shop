@@ -8,10 +8,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.shopme.admin.paging.SearchRepository;
 import com.shopme.common.entity.Customer;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Integer>{
+public interface CustomerRepository extends SearchRepository<Customer, Integer>{
 	
 	
 	@Query("SELECT c FROM Customer c WHERE CONCAT(c.email,' ',c.firstName,' ',c.lastName,' ', "

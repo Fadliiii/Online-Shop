@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.paging.PagingAndSortingHelper;
+import com.shopme.admin.paging.PagingAndSortingParam;
 import com.shopme.admin.user.UserNotFoundException;
 import com.shopme.admin.user.UserService;
 import com.shopme.admin.user.export.UserCsvExporter;
@@ -35,44 +37,17 @@ public class UserController {
 	
 	
 	@GetMapping("/users")
-	public String listByFitrstPage(Model model) {
-		return listByPage(1, model,"firstName","asc",null);
+	public String listByFitrstPage() {
+		return "redirect:/users/page/1?sortField=firstName&sortDir=asc";
 	}
 	
 	
 	@GetMapping("/users/page/{pageNum}")
-	public String listByPage(@PathVariable(name="pageNum") int pageNum,
-			Model model,
-			@Param ("sortField") String sortField,
-			@Param ("sortDir")String sortDir,
-			@Param("keyword")String keyword
+	public String listByPage(@PagingAndSortingParam(listName = "listUsers", moduleURL = "/users") PagingAndSortingHelper helper,
+			@PathVariable(name="pageNum") int pageNum,
+			Model model	
 			){
-		
-		System.out.println("SortField : " + sortField);
-		System.out.println("SortDir : " + sortDir);
-
-		Page<User> page = service.listByPage(pageNum,sortField,sortDir,keyword);
-		List<User>listUsers = page.getContent();
-	
-		long startCount =(pageNum - 1) * service.USERS_PER_PAGE + 1 ;
-		long endCount = startCount + service.USERS_PER_PAGE - 1;
-		if(endCount > page.getTotalElements()) {
-			endCount = page.getTotalElements();
-		}
-		
-		String reverseSortDir =	sortDir.equals("asc") ? "desc" : "asc" ; 
-		
-		
-		model.addAttribute("currentPage", pageNum);
-		model.addAttribute("totalPages",page.getTotalPages());
-		model.addAttribute("startCount",startCount);
-		model.addAttribute("endCount", endCount);
-		model.addAttribute("totalItems", page.getTotalElements());
-		model.addAttribute("listUsers", listUsers);
-		model.addAttribute("sortField", sortField);
-		model.addAttribute("sortDir", sortDir);
-		model.addAttribute("reverseSortDir", reverseSortDir);
-		model.addAttribute("keyword",keyword);
+		service.listByPage(pageNum,helper);
 		
 		return "users/users";
 	}

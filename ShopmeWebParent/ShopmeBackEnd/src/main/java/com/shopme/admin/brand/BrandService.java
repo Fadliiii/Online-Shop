@@ -8,38 +8,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
 
 @Service
 public class BrandService {
+
+    private final UserDetailsService userDetailsService;
 	public static final int BRANDS_PER_PAGE = 10;
 	
 	@Autowired
 	private BrandRepository repository;
+
+    BrandService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 	
 	public List<Brand> listBrand(){
 		return repository.findAll();
 	}
 	
-	public Page<Brand> listByPage(int pageNum,String sortField, String sortDir, String keyword){
-		
-		Sort sort= Sort.by(sortField);
-	
-		sort = sortDir.equals("asc")?sort.ascending() : sort.descending();
-		
-		org.springframework.data.domain.Pageable pageable =  PageRequest.of(pageNum -1, BRANDS_PER_PAGE, sort);
-		
-		if (keyword!=null) {
-			return repository.findAll(keyword, pageable);
-		}
-     	return repository.findAll(pageable);
+	public void listByPage(int pageNum, PagingAndSortingHelper helper){
+		helper.listEntities(pageNum, BRANDS_PER_PAGE, repository);
 	}
 	
 	public Brand save(Brand brand,MultipartFile multipartFile) throws IOException {

@@ -7,10 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.shopme.admin.paging.SearchRepository;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
 
-public interface BrandRepository extends JpaRepository<Brand,Integer>{
+public interface BrandRepository extends SearchRepository<Brand,Integer>{
     Long countById(Integer id);
 
 	public Brand findByName(String name);

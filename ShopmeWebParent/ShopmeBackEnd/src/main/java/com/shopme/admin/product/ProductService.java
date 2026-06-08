@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Product;
 import com.shopme.common.exception.ProductNotFoundException;
 
@@ -29,26 +30,31 @@ public class ProductService {
 			return repository.findAll();
 		}
 		
-		public Page<Product> listByPage(int pageNum,String sortField, String sortDir, String keyword,
-				Integer categoryId){
-			Sort sort = Sort.by(sortField);
+		public void listByPage(int pageNum	,PagingAndSortingHelper helper,Integer categoryId){
+			Pageable pageable = helper.createPageable(PRODUCT_PER_PAGE,pageNum); 
 			
-			sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+			String keyword = helper.getKeyword();
 			
-			Pageable pageable = PageRequest.of(pageNum - 1,PRODUCT_PER_PAGE,sort);//pagenum PageSize,Sort
+			Page<Product> page= null;
 			
 			if(keyword != null && !keyword.isEmpty()) {
 				if(categoryId != null && categoryId > 0) {
 					String categoryIdMatch = "-"+ String.valueOf(categoryId)+"-";
-					return repository.searchInCategory(categoryId, categoryIdMatch,keyword, pageable);
+					page = repository.searchInCategory(categoryId, categoryIdMatch,keyword, pageable);
+				}else {
+				page = repository.findAll(keyword, pageable);
+			
 				}
-			return	repository.findAll(keyword, pageable);
+			}else {
+				if(categoryId != null && categoryId > 0) {
+					String categoryIdMatch = "-"+ String.valueOf(categoryId)+"-";
+					page = repository.findAllInCategory(categoryId, categoryIdMatch, pageable);
+				}else {
+					page = repository.findAll(pageable);
+				}
 			}
-			if(categoryId != null && categoryId > 0) {
-				String categoryIdMatch = "-"+ String.valueOf(categoryId)+"-";
-				return repository.findAllInCategory(categoryId, categoryIdMatch, pageable);
-			}
-			return repository.findAll(pageable);	
+			helper.updateModelAtributes(pageNum, page);	
+			
 		}
 		
 		public void saveProductPrice(Product productInForm) {

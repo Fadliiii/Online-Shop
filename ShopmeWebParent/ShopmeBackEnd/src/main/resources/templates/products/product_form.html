@@ -54,12 +54,9 @@
 
 					<div class="tab-pane" id="description" role="tabpanel">
 
-						<th:block
-							th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
-							<th:block
-								th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
-								<div
-									th:replace="products/product_description_read_only :: content"></div>
+						<th:block th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+							<th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+								<div th:replace="products/product_description_read_only :: content"></div>
 							</th:block>
 						</th:block>
 

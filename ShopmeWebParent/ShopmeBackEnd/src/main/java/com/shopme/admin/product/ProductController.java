@@ -28,6 +28,8 @@ import org.webjars.NotFoundException;
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.brand.BrandService;
 import com.shopme.admin.category.CategoryService;
+import com.shopme.admin.paging.PagingAndSortingHelper;
+import com.shopme.admin.paging.PagingAndSortingParam;
 import com.shopme.admin.security.ShopmeUserDetails;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
@@ -47,45 +49,25 @@ public class ProductController {
 	private CategoryService categoryService;
 	
 	@GetMapping("")
-	public String listFirstPage(Model model) {
+	public String listFirstPage() {
 		
-		return listByPage(1, model, "name", "asc", null,0);
+		return "redirect:/products/page/1?sortField=name&sortDir=asc";
 	}
 	
 	@GetMapping("/page/{pageNum}")
 	public String listByPage(
+			@PagingAndSortingParam(listName = "listProducts",moduleURL = "/products") PagingAndSortingHelper helper,
 			@PathVariable(name ="pageNum")int pageNum,
 			Model model,
-			@Param("sortField")String sortField,
-			@Param("sortDir")String sortDir,
-			@Param("keyword")String keyword,
 			@Param("categoryId")Integer categoryId
 			) {
 		
+		service.listByPage(pageNum, helper,categoryId);
 		
-		Page<Product> page = service.listByPage(pageNum, sortField, sortDir, keyword,categoryId);
-		List<Product> listProducts = page.getContent();
 		List<Category> listCategories = categoryService.listCategoriesUsedInForm();
-		long startCount = (pageNum-1) * service.PRODUCT_PER_PAGE +1;
-		long endCount = startCount+ service.PRODUCT_PER_PAGE -1;
-		if(endCount > page.getTotalElements()) {
-			endCount =  page.getTotalElements();
-		}
-		String reverseSortDir = sortDir.equals("asc")?"desc":"asc";
-
-		if (categoryId != null) model.addAttribute("categoryId", categoryId);
+	
+		if(categoryId != null) model.addAttribute("categoryId", categoryId);
 		
-		model.addAttribute("currentPage", pageNum);
-		model.addAttribute("totalPages", page.getTotalPages());
-		model.addAttribute("startCount", startCount);
-		model.addAttribute("endCount", endCount);
-		model.addAttribute("totalItems", page.getTotalElements());
-		model.addAttribute("sortField", sortField);
-		model.addAttribute("sortDir", sortDir);
-		model.addAttribute("reverseSortDir", reverseSortDir);
-		model.addAttribute("keyword",  keyword);
-		model.addAttribute("currentPage", pageNum);
-		model.addAttribute("listProducts", listProducts);
 		model.addAttribute("listCategories", listCategories);
 		
 		return "products/products";
@@ -121,11 +103,15 @@ public class ProductController {
 			@RequestParam(name = "imageNames",required = false)String [] imageNames,
 			@AuthenticationPrincipal ShopmeUserDetails loogedUser)throws IOException {
 
-		if(loogedUser.hasRole("Salesperson")) {
-			service.saveProductPrice(product);
-			attributes.addFlashAttribute("message","The product has been saved sucessfully.");
-			return"redirect:/products";
+		if(!loogedUser.hasRole("ADMIN") && !loogedUser.hasRole("EDITOR")) {
+			if (loogedUser.hasRole("Salesperson")){
+					service.saveProductPrice(product);
+					attributes.addFlashAttribute("message","The product has been saved sucessfully.");
+					return"redirect:/products";
+			} 	
 		}
+			
+	
 		ProductSaveHelper.setMainImageName(mainImageMultipart,product);
 		ProductSaveHelper.setExisttingExtraImageNames(imageIDs,imageNames,product);
 		ProductSaveHelper.setNewExtraImagesNames(extraImageMultiparts,product);

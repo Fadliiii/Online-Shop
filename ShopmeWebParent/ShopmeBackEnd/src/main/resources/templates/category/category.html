@@ -15,7 +15,7 @@
 		</div>
 	</div>
 
-		<div th:replace = "fragments :: search_form_and_message('/category/page/1')"></div>
+		<div th:replace = "fragments :: search_form_and_message"></div>
 	
 	<div class="full-details">
 		<table
@@ -24,7 +24,7 @@
 				<tr>
 					<th>ID</th>
 					<th>Category Image</th>
-					<th th:replace="fragments :: column_link('/category','name','Category Name','none')" />
+					<th th:replace="fragments :: column_link('name','Category Name','none')" />
 					<th class="hideable-column">Alias</th>
 					<th>Enabled</th>
 					<th></th>
@@ -71,7 +71,7 @@
 			<div th:replace="fragments :: pagination('/category','category')"></div>
 		</div>
 		<th:block th:unless="${keyword != null}">
-		<div th:replace="fragments :: pagination('/category','top-level category')"></div>
+		<div th:replace="fragments :: pagination('top-level category')"></div>
 
 	<div th:replace="modal_fragment :: confirm_modal"></div>
 

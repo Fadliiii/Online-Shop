@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.webjars.NotFoundException;
 
+import com.shopme.admin.paging.PagingAndSortingHelper;
+import com.shopme.admin.paging.PagingAndSortingParam;
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.Customer;
 
@@ -21,37 +23,18 @@ public class CustomerController {
 	@Autowired private CustomerService customerService;
 	
 	@GetMapping("/customers")
-	public String listFirstPage(Model model) {
-		return listByPage(model, 1,"firstName", "asc", null);
+	public String listFirstPage() {
+		return "redirect:/customers/page/1?sortField=firstName&sortDir=asc";
 	}
 	
+	
 	@GetMapping("/customers/page/{pageNum}")
-	public String listByPage(Model model,
-			@PathVariable(name="pageNum")int pageNum,
-			@Param("sortField")String sortField,
-			@Param("sortDir")String sortDir,
-			@Param("keyword")String keyword) {
-	    Page<Customer>	page = customerService.listByPage(pageNum, sortField, sortDir, keyword);
-	    
-	    List<Customer> listCustomer = page.getContent();
-	    long startCount = (pageNum-1)*customerService.CUSTOMER_PER_PAGE+1;
-	    model.addAttribute("startCount", startCount);
-	    
-	    long endCount = startCount+customerService.CUSTOMER_PER_PAGE -1 ;
-	    if (endCount > page.getTotalElements()) {
-	    	endCount = page.getTotalElements();
-	    }
-	    
-	    model.addAttribute("totalPages", page.getTotalPages());
-	    model.addAttribute("totalItems", page.getTotalElements());
-	    model.addAttribute("currentPage", pageNum);
-	    model.addAttribute("listCustomer", listCustomer);
-	    model.addAttribute("sortField", sortField);
-	    model.addAttribute("sortDir", sortDir);
-	    model.addAttribute("keyword", keyword);
-	    model.addAttribute("reverseSortDir", sortDir.equals("asc")? "desc" : "asc");
-	    model.addAttribute("endCount", endCount);
-	    
+	public String listByPage(
+		@PagingAndSortingParam(listName = "listCustomers",moduleURL = "/customers") PagingAndSortingHelper helper,
+		@PathVariable(name="pageNum")int pageNum) {
+	
+		customerService.listByPage(pageNum, helper);
+
 	    return "customers/customers";
 	}
 	
