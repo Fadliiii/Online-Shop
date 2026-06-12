@@ -19,15 +19,29 @@ public class WebSecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		
-		httpSecurity.authorizeHttpRequests(
-				auth -> auth.anyRequest().permitAll());
-		return httpSecurity.build();
-		
-		
+		@Bean
+		public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+			
+			httpSecurity.authorizeHttpRequests(
+					auth -> auth
+					.requestMatchers("/customer").authenticated()
+					.requestMatchers("/","/login").permitAll()
+					.anyRequest().authenticated()
+					)
+			.formLogin(form-> form
+							.loginPage("/login")
+							.usernameParameter("email")
+							.permitAll())
+			
+			.logout(logout -> logout.permitAll())
+			
+			.rememberMe(rem -> rem 
+					.key("dskalfhaslifhiasfoashoifkljh12323")
+					.tokenValiditySeconds(14*24*60*60));
+			return httpSecurity.build();
+			
+			
 	}
 	
 	@Bean
@@ -36,7 +50,9 @@ public class WebSecurityConfig {
 				.requestMatchers(
 						"/images/**",
 						"/js/**",
-						"/webjars/**"
+						"/webjars/**",
+						"/category-images/**",
+						"/site-logo/**"
 						);
 	}
 }

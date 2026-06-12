@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.shopme.common.entity.AuthenticationType;
 import com.shopme.common.entity.Customer;
 
 @Repository
@@ -19,4 +20,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	@Query("UPDATE Customer c SET c.enabled = true, c.verificationCode = null WHERE c.id=?1")
 	@Modifying
 	public void enable(Integer id);
+	
+	@Query("UPDATE Customer c SET c.authenticationType = ?1")
+	@Modifying
+	public void updateAuthenticationType(AuthenticationType type);
 }

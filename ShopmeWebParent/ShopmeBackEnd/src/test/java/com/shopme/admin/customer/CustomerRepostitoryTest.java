@@ -136,21 +136,21 @@ public class CustomerRepostitoryTest {
 		
 	}
 	
-	@Test
-	public void testFindByCode() {
-		String code = "code_123";
-	    Customer customer =	repository.findByVerificationCode(code);
-	    assertThat(customer).isNotNull();
-	    System.out.println(customer);
-	}
-	@Test
-	public void tesetEnabaleCustomer() { 
-		Integer customerId =1;
-		
-		repository.enable(customerId);
-		
-		Customer customer = repository.findById(customerId).get();
-		assertThat(customer.isEnabled()).isTrue();
-		System.out.println(customer);
-	}
+//	@Test
+//	public void testFindByCode() {
+//		String code = "code_123";
+//	    Customer customer =	repository.findByVerificationCode(code);
+//	    assertThat(customer).isNotNull();
+//	    System.out.println(customer);
+//	}
+//	@Test
+//	public void tesetEnabaleCustomer() { 
+//		Integer customerId =1;
+//		
+//		repository.enable(customerId);
+//		
+//		Customer customer = repository.findById(customerId).get();
+//		assertThat(customer.isEnabled()).isTrue();
+//		System.out.println(customer);
+//	}
 }

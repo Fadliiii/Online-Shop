@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head th:replace="fragments :: page_head('Shopme', 'none')">
 </head>
@@ -8,20 +9,24 @@
 	<div class="container-fluid">
 		<div th:replace="navigation :: header_menu"></div>
 		<div th:replace="navigation :: search_nav"></div>
+		
 		<div>
 			<h1>Shopping by Categories</h1>
 		</div>
 		<div class="row">
-			<div class="col-6 col-sm-2 col-md-3 col-lg-2 text-center" th:each = "cat : ${listCategories}">
-				<div><img th:src="@{${cat.imagePath}}" width="80"/></div>
+			<div class="col-6 col-sm-2 col-md-3 col-lg-2 text-center"
+				th:each="cat : ${listCategories}">
+				<div>
+					<img th:src="@{${cat.imagePath}}" width="80" />
+				</div>
 				<div>
 					<a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>
 				</div>
 			</div>
 		</div>
-	
-	<div th:replace="navigation :: footer_menu"></div>
-</div>
+
+		<div th:replace="navigation :: footer_menu"></div>
+	</div>
 </body>
 
 </html>
