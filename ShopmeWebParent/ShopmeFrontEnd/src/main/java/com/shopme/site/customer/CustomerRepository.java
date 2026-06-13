@@ -21,7 +21,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	@Modifying
 	public void enable(Integer id);
 	
-	@Query("UPDATE Customer c SET c.authenticationType = ?1")
+	@Query("UPDATE Customer c SET c.authenticationType = ?2 WHERE c.id =?1")
 	@Modifying
-	public void updateAuthenticationType(AuthenticationType type);
+	public void updateAuthenticationType(Integer customerID,AuthenticationType type);
 }

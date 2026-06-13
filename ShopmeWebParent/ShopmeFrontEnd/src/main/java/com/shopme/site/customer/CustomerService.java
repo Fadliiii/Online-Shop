@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.shopme.common.entity.AuthenticationType;
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.Customer;
 import com.shopme.site.country.CountryRepository;
@@ -58,5 +59,50 @@ public class CustomerService {
 			customerRepository.enable(customer.getId());
 			return true;
 		}
+	}
+	
+	public void updateAuthentication(Customer customer , AuthenticationType type) {
+		if(!customer.getAuthenticationType().equals(type)) {
+			customerRepository.updateAuthenticationType(customer.getId(), type);
+		}
+		
+	}
+	
+	public void addNewCustomerUponAuthLogin(String name,String email,String countryCode) {
+		Customer customer = new Customer();
+		customer.setEmail(email);
+		
+		setName(name,customer);
+		
+		customer.setEnabled(true);
+		customer.setCreatedTime(new Date());
+		customer.setAuthenticationType(AuthenticationType.GOOGLE);
+		customer.setPassword("");
+		customer.setAddressLine1("");
+		customer.setCity("");
+		customer.setState("");
+		customer.setPhoneNumber("");
+		customer.setPostalCode("");
+		customer.setCountry(countryRepository.findByCode(countryCode));
+
+		customerRepository.save(customer);
+	}
+	
+	private void setName(String name,Customer customer) {
+		String[] nameArray = name.split(" ");
+		if(nameArray.length <2) {
+			customer.setFirstName(name);
+			customer.setLastName("");
+		}else {
+			String firstName = nameArray[0];
+			customer.setFirstName(firstName);
+			
+			String lastName = name.replaceFirst(firstName,"");
+			customer.setLastName(lastName);
+		}
+	}
+	
+	public Customer getCustomerByEmail(String email) {
+		return customerRepository.findByEmail(email);
 	}
 }
