@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.shopme.site.security.DatabaseLoginSuccesHandler;
 import com.shopme.site.security.oauth.CustomerOauth2UserService;
 import com.shopme.site.security.oauth.Oauth2LoginSuccessHandler;
 
@@ -20,7 +21,7 @@ public class WebSecurityConfig {
 	
 	@Autowired private CustomerOauth2UserService oauth2UserService;
 	@Autowired private Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
-	
+	@Autowired private DatabaseLoginSuccesHandler databaseLoginSuccesHandler;
 	
 		@Bean
 		public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -33,6 +34,7 @@ public class WebSecurityConfig {
 			.formLogin(form-> form
 							.loginPage("/login")
 							.usernameParameter("email")
+							.successHandler(databaseLoginSuccesHandler)
 							.permitAll())
 			.oauth2Login(oauth -> oauth
 					.loginPage("/login")

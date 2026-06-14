@@ -38,6 +38,7 @@ public class CustomerService {
 		encodePassword(customer);
 		customer.setEnabled(false);
 		customer.setCreatedTime(new Date());
+		customer.setAuthenticationType(AuthenticationType.DATABASE);
 		
 		String randomCode =  UUID.randomUUID().toString().replace("-", "");
 		customer.setVerificationCode(randomCode);
