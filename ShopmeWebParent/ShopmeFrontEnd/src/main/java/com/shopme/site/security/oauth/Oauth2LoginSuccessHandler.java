@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +41,7 @@ public class Oauth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 	    if(customer == null) {
 	    	customerService.addNewCustomerUponAuthLogin(name,email,countryCode,authenticationType);
 	    }else {
+	    	oauth2User.setFullName(customer.getFullName());
 	    	customerService.updateAuthentication(customer, authenticationType);
 	    }
 	    super.onAuthenticationSuccess(request, response, authentication);
