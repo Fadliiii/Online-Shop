@@ -73,7 +73,7 @@ public class CustomerService {
 		customerInForm.setEnabled(customerInDb.isEnabled());
 		customerInForm.setCreatedTime(customerInDb.getCreatedTime());
 		customerInForm.setVerificationCode(customerInDb.getVerificationCode());
-		
+		customerInForm.setResetPasswordToken(customerInDb.getResetPasswordToken());
 		customerRepository.save(customerInForm);
 	}
 	

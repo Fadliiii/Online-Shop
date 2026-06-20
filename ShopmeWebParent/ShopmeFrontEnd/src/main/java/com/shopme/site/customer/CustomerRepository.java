@@ -7,9 +7,14 @@ import org.springframework.stereotype.Repository;
 
 import com.shopme.common.entity.AuthenticationType;
 import com.shopme.common.entity.Customer;
+import java.util.List;
+import java.util.Optional;
+
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer>{
+
+	public Customer findByResetPasswordToken(String resetPasswordToken);
 	
 	@Query("SELECT c FROM Customer c WHERE c.email =?1 ")
 	public Customer findByEmail(String email);
