@@ -103,7 +103,7 @@ public class ProductController {
 			@RequestParam(name = "imageNames",required = false)String [] imageNames,
 			@AuthenticationPrincipal ShopmeUserDetails loogedUser)throws IOException {
 
-		if(!loogedUser.hasRole("ADMIN") && !loogedUser.hasRole("EDITOR")) {
+		if(!loogedUser.hasRole("Admin") && !loogedUser.hasRole("Editor")) {
 			if (loogedUser.hasRole("Salesperson")){
 					service.saveProductPrice(product);
 					attributes.addFlashAttribute("message","The product has been saved sucessfully.");
@@ -181,17 +181,26 @@ public class ProductController {
 
 	@GetMapping("/edit/{id}")
 	public String editProduct(@PathVariable ("id") Integer id, Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes,
+			@AuthenticationPrincipal ShopmeUserDetails loogedUser) {
 		try {
 		Product product = service.get(id);
 		List<Brand>listBrands = brandService.listBrand();
 		Integer numberOfExistingExtraImages =product.getImages().size();
 		
+		boolean isReadOnlyForSalesPerson = false;
+		
+		if(!loogedUser.hasRole("Admin") && !loogedUser.hasRole("Editor")) {
+			if (loogedUser.hasRole("Salesperson")){
+					isReadOnlyForSalesPerson =true;
+			} 	
+		}
+		
 		model.addAttribute("product",product);
 		model.addAttribute("pageTitle","Edit Product (ID : "+id);
 		model.addAttribute("listBrands", listBrands);
 		model.addAttribute("numberOfExistingExtraImages", numberOfExistingExtraImages);
-	
+		model.addAttribute("isReadOnlyForSalesPerson", isReadOnlyForSalesPerson);
 		return "products/product_form";
 		}catch (ProductNotFoundException e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());

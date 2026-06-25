@@ -240,6 +240,11 @@ public class Product {
 		super();
 	}
 
+	public Product(Integer id) {
+		super();
+		this.id = id;
+	}
+
 	public String getMainImage() {
 		return mainImage;
 	}
