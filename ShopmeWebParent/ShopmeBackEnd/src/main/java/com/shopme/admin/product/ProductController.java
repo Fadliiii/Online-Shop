@@ -125,7 +125,7 @@ public class ProductController {
 		
 		attributes.addFlashAttribute("message","The product has been saved sucessfully.");
 
-		return"redirect:/products";
+		return"redirect:/products/page/1?sortField=name&sortDir=asc";
 	}
 	
 	@GetMapping("/detail/{id}")
@@ -155,7 +155,7 @@ public class ProductController {
 		String status = enabled?"enabled" : "disabled";
 		String message ="The Product ID "+id+" has been "+ status;
 		redirectAttributes.addFlashAttribute("message", message);
-		return"redirect:/products";
+		return"redirect:/products/page/1?sortField=name&sortDir=asc";
 	}
 	
 	@GetMapping("/delete/{id}")
@@ -202,6 +202,7 @@ public class ProductController {
 		model.addAttribute("numberOfExistingExtraImages", numberOfExistingExtraImages);
 		model.addAttribute("isReadOnlyForSalesPerson", isReadOnlyForSalesPerson);
 		return "products/product_form";
+		
 		}catch (ProductNotFoundException e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());
 			return "redirect:/products";
