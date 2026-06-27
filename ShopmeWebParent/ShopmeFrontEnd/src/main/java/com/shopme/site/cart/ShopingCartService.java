@@ -1,5 +1,7 @@
 package com.shopme.site.cart;
 
+import java.util.List;
+import com.shopme.site.customer.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +11,14 @@ import com.shopme.common.entity.Product;
 
 @Service
 public class ShopingCartService {
+
+    private final CustomerRepository customerRepository;
 	
 	@Autowired private CartItemRepository cartItemRepository;
+
+    ShopingCartService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 	
 	public Integer addProduct(Integer prductId,Integer quantity, Customer customer) throws ShoppingCartException {
 		Integer updatedQuantity = quantity;
@@ -34,5 +42,9 @@ public class ShopingCartService {
 		
 		cartItemRepository.save(cartItem);
 		return updatedQuantity;
+	}
+	
+	public List<CartItem> findByCustomer (Customer customer){
+		return cartItemRepository.findByCustomer(customer);
 	}
 }
