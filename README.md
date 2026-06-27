@@ -26,7 +26,7 @@ Backend
 * Spring MVC
 * Spring Data JPA
 * Hibernate
-* Spring Security(JWT)
+* Spring Security
 
 Frontend
 
@@ -139,7 +139,7 @@ These entities are mapped to database tables using **JPA / Hibernate**.
 
 ### 1 Clone repository
 
-git clone https://github.com/yourusername/shopme-admin
+git clone https://github.com/Fadliiii/shopme-admin
 
 ### 2 Configure database
 
